@@ -10,6 +10,8 @@
     "deploy": "npm run build && gh-pages -d dist"
   },
   "homepage": "https://gsphome.github.io/capibara",
+  "license": "MIT",
+  "author": "Genil Suarez",
   "devDependencies": {
     "gh-pages": "^6.3.0",
     "terser": "^5.43.1",

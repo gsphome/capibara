@@ -2,6 +2,8 @@
 
 Un juego web divertido donde ayudas a un capibara hambriento a atrapar vegetales que caen del cielo.
 
+**Creado por:** Genil Suarez
+
 ## 🎮 Cómo Jugar
 
 - **Objetivo**: Llena al capibara al 100% atrapando vegetales
@@ -70,3 +72,15 @@ Puedes ver todos los iconos SVG de vegetales en: `vegetable-preview.html`
 - **Derrota**: Deja caer 3 vegetales
 
 ¡Disfruta ayudando al capibara a conseguir su comida! 🦫🥬
+
+## 📄 Licencia
+
+MIT License - ver [LICENSE](LICENSE) para más detalles.
+
+© 2025 Genil Suarez
+
+## 📄 Licencia
+
+MIT License - ver [LICENSE](LICENSE) para más detalles.
+
+© 2024 Genil Suarez
