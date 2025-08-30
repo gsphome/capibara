@@ -27,7 +27,7 @@ export class VegetableSpawner {
 
   private spawnVegetable(level: number): Vegetable {
     const type = this.vegetableTypes[Math.floor(Math.random() * this.vegetableTypes.length)];
-    const x = Math.random() * (window.innerWidth - 30);
+    const x = Math.random() * (this.container.clientWidth - 30);
     
     const vegetable: Vegetable = {
       id: Date.now().toString() + Math.random(),

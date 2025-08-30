@@ -6,6 +6,7 @@ export class GameOverScreen {
     this.onRestart = onRestart;
     this.createElement();
     container.appendChild(this.element);
+    this.hide(); // Start hidden
   }
 
   private createElement(): void {

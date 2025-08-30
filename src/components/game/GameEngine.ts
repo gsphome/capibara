@@ -49,6 +49,16 @@ export class GameEngine {
   private handleGameStateChange(): void {
     if (gameState.gameStatus === 'paused') {
       this.pauseOverlay.show(() => gameState.resumeGame());
+    } else if (gameState.gameStatus === 'playing') {
+      this.pauseOverlay.hide();
+    } else if (gameState.gameStatus === 'won') {
+      this.levelTransition.show(gameState.level + 1);
+      setTimeout(() => {
+        gameState.resetForNextLevel();
+        gameState.gameStatus = 'playing';
+      }, 2000);
+    } else if (gameState.gameStatus === 'lost') {
+      this.gameOverScreen.show(false, gameState.score, gameState.level);
     }
   }
 
@@ -85,17 +95,6 @@ export class GameEngine {
       // Game is paused, don't update but keep rendering
     }
 
-    // Handle game states
-    if (gameState.gameStatus === 'won') {
-      this.levelTransition.show(gameState.level + 1);
-      setTimeout(() => {
-        gameState.resetForNextLevel();
-        gameState.gameStatus = 'playing';
-      }, 2000);
-    } else if (gameState.gameStatus === 'lost') {
-      this.gameOverScreen.show(false, gameState.score, gameState.level);
-    }
-
     this.animationId = requestAnimationFrame((time) => this.gameLoop(time));
   }
 
@@ -130,7 +129,7 @@ export class GameEngine {
       }
 
       // Check if vegetable fell off screen
-      if (vegetable.y > window.innerHeight) {
+      if (vegetable.y > this.container.clientHeight) {
         gameState.incrementMissed();
         this.spawner.removeVegetable(vegetable.id);
         return false;

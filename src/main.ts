@@ -239,8 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('resize', () => {
   // Update canvas sizes if needed
   const canvas = document.querySelector('.particle-canvas') as HTMLCanvasElement;
-  if (canvas) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  const gameContainer = document.querySelector('.capybara-game') as HTMLElement;
+  if (canvas && gameContainer) {
+    canvas.width = gameContainer.clientWidth;
+    canvas.height = gameContainer.clientHeight;
   }
 });

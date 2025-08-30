@@ -1,13 +1,19 @@
+import { gameState } from '../../stores/GameState';
+
 export class CapybaraPlayer {
   private element!: HTMLElement;
   private fillElement!: HTMLElement;
   private svgElement!: SVGElement;
-  private x: number = window.innerWidth / 2 - 40;
-  private lastX: number = window.innerWidth / 2 - 40;
+  private x: number = 0;
+  private lastX: number = 0;
+  private gameContainer: HTMLElement;
   private readonly speed: number = 8;
   private direction: 'left' | 'right' = 'right';
 
   constructor(container: HTMLElement) {
+    this.gameContainer = container;
+    this.x = this.gameContainer.clientWidth / 2 - 50;
+    this.lastX = this.x;
     this.createElement();
     container.appendChild(this.element);
     this.setupControls();
@@ -54,6 +60,8 @@ export class CapybaraPlayer {
 
   private setupControls(): void {
     document.addEventListener('keydown', (e) => {
+      if (gameState.gameStatus !== 'playing') return;
+      
       switch(e.key) {
         case 'ArrowLeft':
         case 'a':
@@ -70,7 +78,11 @@ export class CapybaraPlayer {
 
     // Mouse controls
     document.addEventListener('mousemove', (e) => {
-      this.x = Math.max(0, Math.min(window.innerWidth - 100, e.clientX - 50));
+      if (gameState.gameStatus !== 'playing') return;
+      
+      const rect = this.gameContainer.getBoundingClientRect();
+      const relativeX = e.clientX - rect.left;
+      this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - 100, relativeX - 50));
       this.updatePosition();
     });
 
@@ -89,7 +101,7 @@ export class CapybaraPlayer {
     }, { passive: false });
 
     document.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
+      if (!isDragging || gameState.gameStatus !== 'playing') return;
       
       // Only handle touches on the game area
       const target = e.target as HTMLElement;
@@ -98,7 +110,9 @@ export class CapybaraPlayer {
       }
       
       const touch = e.touches[0];
-      this.x = Math.max(0, Math.min(window.innerWidth - 100, touch.clientX - 50));
+      const rect = this.gameContainer.getBoundingClientRect();
+      const relativeX = touch.clientX - rect.left;
+      this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - 100, relativeX - 50));
       this.updatePosition();
       e.preventDefault();
     }, { passive: false });
@@ -114,7 +128,7 @@ export class CapybaraPlayer {
   }
 
   private moveRight(): void {
-    this.x = Math.min(window.innerWidth - 100, this.x + this.speed);
+    this.x = Math.min(this.gameContainer.clientWidth - 100, this.x + this.speed);
     this.updatePosition();
   }
 
@@ -155,7 +169,7 @@ export class CapybaraPlayer {
   public getBounds() {
     return {
       x: this.x,
-      y: window.innerHeight - 95,
+      y: this.gameContainer.clientHeight - 95,
       width: 100,
       height: 75
     };
