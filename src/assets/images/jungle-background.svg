@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#98FB98;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4682B4;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#5F9EA0;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="600" height="400" fill="url(#skyGrad)"/>
+  
+  <!-- Distant hills -->
+  <path d="M0,200 Q150,180 300,190 T600,200 L600,400 L0,400 Z" fill="#228B22" opacity="0.6"/>
+  
+  <!-- Water body -->
+  <ellipse cx="300" cy="350" rx="250" ry="30" fill="url(#waterGrad)"/>
+  
+  <!-- Trees -->
+  <ellipse cx="80" cy="180" rx="25" ry="40" fill="#228B22"/>
+  <rect x="75" y="200" width="10" height="30" fill="#8B4513"/>
+  
+  <ellipse cx="150" cy="170" rx="30" ry="50" fill="#32CD32"/>
+  <rect x="145" y="200" width="10" height="35" fill="#8B4513"/>
+  
+  <ellipse cx="450" cy="175" rx="28" ry="45" fill="#228B22"/>
+  <rect x="445" y="205" width="10" height="32" fill="#8B4513"/>
+  
+  <ellipse cx="520" cy="165" rx="35" ry="55" fill="#32CD32"/>
+  <rect x="515" y="200" width="10" height="40" fill="#8B4513"/>
+  
+  <!-- Jungle plants -->
+  <path d="M50,250 Q70,230 90,250 Q70,270 50,250" fill="#228B22"/>
+  <path d="M500,260 Q520,240 540,260 Q520,280 500,260" fill="#32CD32"/>
+  
+  <!-- Bushes -->
+  <ellipse cx="120" cy="280" rx="40" ry="25" fill="#228B22"/>
+  <ellipse cx="480" cy="285" rx="35" ry="20" fill="#32CD32"/>
+  
+  <!-- Cattails -->
+  <rect x="200" y="320" width="3" height="40" fill="#228B22"/>
+  <ellipse cx="201.5" cy="315" rx="2" ry="8" fill="#8B4513"/>
+  
+  <rect x="380" y="325" width="3" height="35" fill="#228B22"/>
+  <ellipse cx="381.5" cy="320" rx="2" ry="7" fill="#8B4513"/>
+  
+  <!-- Lily pads -->
+  <ellipse cx="250" cy="345" rx="12" ry="8" fill="#228B22" opacity="0.8"/>
+  <ellipse cx="350" cy="348" rx="10" ry="6" fill="#32CD32" opacity="0.8"/>
+</svg>
