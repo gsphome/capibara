@@ -5,6 +5,7 @@ import { ParticleSystem } from '../effects/ParticleSystem';
 import { GameHUD } from '../ui/GameHUD';
 import { GameOverScreen } from '../ui/GameOverScreen';
 import { LevelTransition } from '../ui/LevelTransition';
+import { PauseOverlay } from '../ui/PauseOverlay';
 import type { Vegetable } from '../../types/game.types';
 
 export class GameEngine {
@@ -15,6 +16,7 @@ export class GameEngine {
   private hud!: GameHUD;
   private gameOverScreen!: GameOverScreen;
   private levelTransition!: LevelTransition;
+  private pauseOverlay!: PauseOverlay;
   private animationId: number = 0;
   private lastTime: number = 0;
   private vegetables: Vegetable[] = [];
@@ -32,12 +34,22 @@ export class GameEngine {
     this.hud = new GameHUD(this.container);
     this.gameOverScreen = new GameOverScreen(this.container, () => this.restart());
     this.levelTransition = new LevelTransition(this.container);
+    this.pauseOverlay = new PauseOverlay(this.container);
+
+    // Listen to game state changes
+    gameState.addListener(() => this.handleGameStateChange());
 
     // Start game loop
     this.gameLoop(0);
 
     // Setup keyboard controls
     this.setupKeyboardControls();
+  }
+
+  private handleGameStateChange(): void {
+    if (gameState.gameStatus === 'paused') {
+      this.pauseOverlay.show(() => gameState.resumeGame());
+    }
   }
 
   private setupKeyboardControls(): void {
@@ -69,9 +81,11 @@ export class GameEngine {
     if (gameState.gameStatus === 'playing') {
       this.update(deltaTime);
       this.render();
+    } else if (gameState.gameStatus === 'paused') {
+      // Game is paused, don't update but keep rendering
     }
 
-    // Handle game over states
+    // Handle game states
     if (gameState.gameStatus === 'won') {
       this.levelTransition.show(gameState.level + 1);
       setTimeout(() => {

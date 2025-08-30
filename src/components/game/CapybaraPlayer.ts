@@ -78,12 +78,24 @@ export class CapybaraPlayer {
     let isDragging = false;
     
     document.addEventListener('touchstart', (e) => {
+      // Only handle touches on the game area, not UI elements
+      const target = e.target as HTMLElement;
+      if (target.closest('.pause-overlay') || target.closest('.game-over') || target.closest('.level-transition')) {
+        return;
+      }
+      
       isDragging = true;
       e.preventDefault();
     }, { passive: false });
 
     document.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
+      
+      // Only handle touches on the game area
+      const target = e.target as HTMLElement;
+      if (target.closest('.pause-overlay') || target.closest('.game-over') || target.closest('.level-transition')) {
+        return;
+      }
       
       const touch = e.touches[0];
       this.x = Math.max(0, Math.min(window.innerWidth - 100, touch.clientX - 50));

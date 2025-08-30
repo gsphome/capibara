@@ -76,7 +76,8 @@ export class GameState {
     this.fallSpeed = 2;
     this.ceilingHeight = 100;
     this.vegetables = [];
-    this.notify();
+    // Don't notify immediately to prevent race conditions
+    setTimeout(() => this.notify(), 100);
   }
 
   public pauseGame(): void {

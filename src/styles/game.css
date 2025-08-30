@@ -225,6 +225,110 @@
   100% { transform: scale(1); }
 }
 
+/* Pause Overlay */
+.pause-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.pause-overlay--show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.pause-overlay__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.pause-overlay__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: white;
+  min-width: 300px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.pause-overlay__icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: pausePulse 2s ease-in-out infinite;
+}
+
+.pause-overlay__content h2 {
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+  color: #FFD700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.pause-overlay__content p {
+  font-size: 1.1rem;
+  margin: 0 0 2rem 0;
+  color: #E0E0E0;
+}
+
+.pause-overlay__resume-btn {
+  padding: 16px 32px;
+  font-size: 1.3rem;
+  background: linear-gradient(45deg, #32CD32, #228B22);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  min-height: 60px;
+  min-width: 200px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.pause-overlay__resume-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(50, 205, 50, 0.4);
+}
+
+.pause-overlay__resume-btn:active {
+  transform: scale(0.95);
+}
+
+.pause-overlay__hint {
+  margin-top: 1.5rem;
+  opacity: 0.7;
+}
+
+.pause-overlay__hint small {
+  font-size: 0.9rem;
+  color: #B0B0B0;
+}
+
+@keyframes pausePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
 /* Game Over Screen */
 .game-over {
   position: absolute;
