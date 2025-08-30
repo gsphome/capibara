@@ -1,7 +1,11 @@
 export class LevelTransition {
   private element!: HTMLElement;
 
-  constructor(private container: HTMLElement) {}
+  private container: HTMLElement;
+
+  constructor(container: HTMLElement) {
+    this.container = container;
+  }
 
   public show(level: number): void {
     this.createElement(level);

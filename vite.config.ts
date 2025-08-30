@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '/capibara/',
   build: {
     target: 'es2015',
     minify: 'esbuild',

@@ -145,50 +145,79 @@ class CapybaraCatcherGame {
   private showInstructions(): void {
     const instructions = document.createElement('div');
     instructions.style.cssText = `
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.8);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
       color: white;
-      padding: 2rem;
-      border-radius: 15px;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       z-index: 1000;
-      max-width: 400px;
+      padding: 2rem;
+      box-sizing: border-box;
+      overflow: hidden;
     `;
     
     instructions.innerHTML = `
-      <h1>🦫 Capybara Catcher</h1>
-      <p>Help the hungry capybara catch falling vegetables!</p>
-      <div style="margin: 1rem 0;">
-        <p><strong>Controls:</strong></p>
-        <p>🖱️ Mouse: Move to follow cursor</p>
-        <p>⌨️ Keyboard: Arrow keys or A/D</p>
-        <p>📱 Mobile: Touch and drag</p>
-      </div>
-      <div style="margin: 1rem 0;">
-        <p><strong>Goal:</strong> Fill the capybara to 100%</p>
-        <p><strong>Warning:</strong> Don't miss 3 vegetables!</p>
-      </div>
+      <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px; max-width: 400px; text-align: center;">
+        <h1 style="font-size: 2.5rem; margin: 0 0 1rem 0;">🦫 Capybara Catcher</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Help the hungry capybara catch falling vegetables!</p>
+        <div style="margin: 1rem 0; font-size: 1rem;">
+          <p><strong>Controls:</strong></p>
+          <p>🖱️ Mouse: Move to follow cursor</p>
+          <p>⌨️ Keyboard: Arrow keys or A/D</p>
+          <p>📱 Mobile: Touch and drag</p>
+        </div>
+        <div style="margin: 1.5rem 0; font-size: 1rem;">
+          <p><strong>Goal:</strong> Fill the capybara to 100%</p>
+          <p><strong>Warning:</strong> Don't miss 3 vegetables!</p>
+        </div>
       <button id="startGame" style="
-        padding: 12px 24px;
-        font-size: 1.2rem;
+        padding: 16px 32px;
+        font-size: 1.4rem;
         background: #32CD32;
         color: white;
         border: none;
         border-radius: 25px;
         cursor: pointer;
         margin-top: 1rem;
-      ">Start Game</button>
+        min-height: 60px;
+        min-width: 200px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        transition: all 0.2s ease;
+      " onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" ontouchstart="this.style.transform='scale(0.95)'" ontouchend="this.style.transform='scale(1)'">🎮 Start Game</button>
+      </div>
     `;
     
     this.container.appendChild(instructions);
     
     const startButton = instructions.querySelector('#startGame') as HTMLButtonElement;
-    startButton.addEventListener('click', () => {
+    
+    // Enhanced mobile interaction
+    const startGame = () => {
       instructions.remove();
       this.startGame();
+    };
+    
+    startButton.addEventListener('click', startGame);
+    startButton.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      startGame();
+    });
+    
+    // Prevent background interaction
+    instructions.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    });
+    
+    instructions.addEventListener('click', (e) => {
+      e.stopPropagation();
     });
   }
 
