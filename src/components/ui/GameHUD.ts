@@ -7,11 +7,37 @@ export class GameHUD {
   private progressFill!: HTMLElement;
 
   constructor(container: HTMLElement) {
-    this.createElement(container);
-    container.appendChild(this.element);
+    // Clear any existing HUD
+    const existingHUD = document.querySelector('.game-hud');
+    if (existingHUD) {
+      existingHUD.remove();
+    }
+    
+    this.createElement();
+    
+    // Check if wrapper already exists
+    let wrapper = document.querySelector('.game-wrapper') as HTMLElement;
+    let sidebar = document.querySelector('.game-sidebar') as HTMLElement;
+    
+    if (!wrapper) {
+      // Create new wrapper and sidebar
+      wrapper = document.createElement('div');
+      wrapper.className = 'game-wrapper';
+      
+      sidebar = document.createElement('div');
+      sidebar.className = 'game-sidebar';
+      
+      sidebar.appendChild(this.element);
+      wrapper.appendChild(sidebar);
+      wrapper.appendChild(container);
+      document.body.appendChild(wrapper);
+    } else if (sidebar) {
+      // Use existing sidebar
+      sidebar.appendChild(this.element);
+    }
   }
 
-  private createElement(container: HTMLElement): void {
+  private createElement(): void {
     // Main HUD container
     this.element = document.createElement('div');
     this.element.className = 'game-hud';
@@ -34,7 +60,7 @@ export class GameHUD {
     this.element.appendChild(this.scoreElement);
     this.element.appendChild(this.levelElement);
     this.element.appendChild(this.missedElement);
-
+    
     // Progress bar
     const progressContainer = document.createElement('div');
     progressContainer.className = 'progress-bar';
@@ -44,9 +70,11 @@ export class GameHUD {
     this.progressFill.style.width = '0%';
     
     progressContainer.appendChild(this.progressFill);
-    container.appendChild(progressContainer);
+    this.element.appendChild(progressContainer);
     
     this.progressBar = progressContainer;
+
+
   }
 
   public updateScore(score: number): void {
@@ -61,6 +89,8 @@ export class GameHUD {
     this.missedElement.textContent = `Missed: ${missed}/3`;
     if (missed >= 2) {
       this.missedElement.style.color = '#ff4444';
+    } else {
+      this.missedElement.style.color = 'white';
     }
   }
 

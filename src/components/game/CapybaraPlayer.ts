@@ -169,7 +169,7 @@ export class CapybaraPlayer {
   public getBounds() {
     return {
       x: this.x,
-      y: this.gameContainer.clientHeight - 95,
+      y: this.gameContainer.clientHeight - 145,
       width: 100,
       height: 75
     };
