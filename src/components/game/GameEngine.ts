@@ -4,6 +4,7 @@ import { VegetableSpawner } from './VegetableSpawner';
 import { ParticleSystem } from '../effects/ParticleSystem';
 import { GameHUD } from '../ui/GameHUD';
 import { GameOverScreen } from '../ui/GameOverScreen';
+import { LevelTransition } from '../ui/LevelTransition';
 import type { Vegetable } from '../../types/game.types';
 
 export class GameEngine {
@@ -13,6 +14,7 @@ export class GameEngine {
   private particles!: ParticleSystem;
   private hud!: GameHUD;
   private gameOverScreen!: GameOverScreen;
+  private levelTransition!: LevelTransition;
   private animationId: number = 0;
   private lastTime: number = 0;
   private vegetables: Vegetable[] = [];
@@ -29,6 +31,7 @@ export class GameEngine {
     this.particles = new ParticleSystem(this.container);
     this.hud = new GameHUD(this.container);
     this.gameOverScreen = new GameOverScreen(this.container, () => this.restart());
+    this.levelTransition = new LevelTransition(this.container);
 
     // Start game loop
     this.gameLoop(0);
@@ -69,12 +72,14 @@ export class GameEngine {
     }
 
     // Handle game over states
-    if (gameState.gameStatus === 'won' || gameState.gameStatus === 'lost') {
-      this.gameOverScreen.show(
-        gameState.gameStatus === 'won',
-        gameState.score,
-        gameState.level
-      );
+    if (gameState.gameStatus === 'won') {
+      this.levelTransition.show(gameState.level + 1);
+      setTimeout(() => {
+        gameState.resetForNextLevel();
+        gameState.gameStatus = 'playing';
+      }, 2000);
+    } else if (gameState.gameStatus === 'lost') {
+      this.gameOverScreen.show(false, gameState.score, gameState.level);
     }
 
     this.animationId = requestAnimationFrame((time) => this.gameLoop(time));
@@ -131,7 +136,8 @@ export class GameEngine {
     this.player.updateFill(gameState.capybaraFillPercentage);
 
     // Check for level progression
-    if (gameState.score > 0 && gameState.score % 100 === 0 && gameState.capybaraFillPercentage < 100) {
+    const currentLevelThreshold = gameState.level * 100;
+    if (gameState.score >= currentLevelThreshold && gameState.capybaraFillPercentage < 100) {
       gameState.incrementLevel();
     }
   }

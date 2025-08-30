@@ -60,6 +60,13 @@ export class GameState {
     this.notify();
   }
 
+  public resetForNextLevel(): void {
+    this.capybaraFillPercentage = 0;
+    this.missedVegetables = 0;
+    this.vegetables = [];
+    this.notify();
+  }
+
   public resetGame(): void {
     this.level = 1;
     this.score = 0;

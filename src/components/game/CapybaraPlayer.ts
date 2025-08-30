@@ -13,22 +13,7 @@ export class CapybaraPlayer {
     this.setupControls();
   }
 
-  private updateCapybaraFill(percentage: number): void {
-    const bodyFill = this.svgElement.querySelector('.body-fill') as SVGElement;
-    if (bodyFill) {
-      const opacity = Math.min(0.7, percentage / 100 * 0.7);
-      bodyFill.setAttribute('opacity', opacity.toString());
-      
-      // Change color based on fullness
-      if (percentage >= 80) {
-        bodyFill.setAttribute('fill', '#FFD700');
-      } else if (percentage >= 50) {
-        bodyFill.setAttribute('fill', '#ADFF2F');
-      } else {
-        bodyFill.setAttribute('fill', '#32CD32');
-      }
-    }
-  }
+
 
   private createElement(): void {
     this.element = document.createElement('div');
