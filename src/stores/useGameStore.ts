@@ -1,21 +1,18 @@
 import { createStore } from 'zustand/vanilla';
-import type { Vegetable } from '../types/game.types';
 import { GameSettings } from '../config/GameSettings';
 
 export interface GameState {
-  // Game state
+  // Global game state (UI-relevant)
   level: number;
   score: number;
   missedVegetables: number;
   capybaraFillPercentage: number;
   gameStatus: 'playing' | 'won' | 'lost' | 'paused';
-  fallSpeed: number;
-  ceilingHeight: number;
-  vegetables: Vegetable[];
   
-  // Actions
-  addVegetable: (vegetable: Vegetable) => void;
-  removeVegetable: (id: string) => void;
+  // Game settings (not runtime objects)
+  ceilingHeight: number;
+  
+  // Actions (only for global state)
   incrementLevel: () => void;
   incrementMissed: () => void;
   updateScore: (points: number) => void;
@@ -32,25 +29,12 @@ export const useGameStore = createStore<GameState>()((set) => ({
   missedVegetables: 0,
   capybaraFillPercentage: 0,
   gameStatus: 'playing',
-  fallSpeed: 2,
   ceilingHeight: 100,
-  vegetables: [],
 
   // Actions
-  addVegetable: (vegetable: Vegetable) =>
-    set((state) => ({
-      vegetables: [...state.vegetables, vegetable],
-    })),
-
-  removeVegetable: (id: string) =>
-    set((state) => ({
-      vegetables: state.vegetables.filter((v) => v.id !== id),
-    })),
-
   incrementLevel: () =>
     set((state) => ({
       level: state.level + 1,
-      fallSpeed: state.fallSpeed * 1.15,
       ceilingHeight: Math.max(50, state.ceilingHeight * 0.9),
     })),
 
@@ -80,7 +64,6 @@ export const useGameStore = createStore<GameState>()((set) => ({
     set(() => ({
       capybaraFillPercentage: 0,
       missedVegetables: 0,
-      vegetables: [],
       gameStatus: 'playing',
     })),
 
@@ -91,9 +74,7 @@ export const useGameStore = createStore<GameState>()((set) => ({
       missedVegetables: 0,
       capybaraFillPercentage: 0,
       gameStatus: 'playing',
-      fallSpeed: 2,
       ceilingHeight: 100,
-      vegetables: [],
     })),
 
   pauseGame: () =>

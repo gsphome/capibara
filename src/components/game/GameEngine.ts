@@ -67,7 +67,12 @@ export class GameEngine {
     } else if (state.gameStatus === 'won' && !this.levelTransitionActive) {
       this.levelTransitionActive = true;
       this.audioManager.play('levelup');
+      
+      // CRITICAL: Clear vegetables IMMEDIATELY to stop all collision detection
+      this.clearAllVegetables();
+      
       this.levelTransition.show(state.level + 1);
+      
       setTimeout(() => {
         this.gameStore.getState().incrementLevel();
         this.gameStore.getState().resetForNextLevel();
@@ -108,12 +113,15 @@ export class GameEngine {
     this.lastTime = currentTime;
 
     const currentState = this.gameStore.getState();
-    if (currentState.gameStatus === 'playing') {
+    
+    // CRITICAL: Only update game logic when actually playing
+    if (currentState.gameStatus === 'playing' && !this.levelTransitionActive) {
       this.update(deltaTime);
       this.render();
     } else if (currentState.gameStatus === 'paused') {
       // Game is paused, don't update but keep rendering
     }
+    // During level transition or other states: NO game logic updates
 
     this.animationId = requestAnimationFrame((time) => this.gameLoop(time));
   }
@@ -121,22 +129,35 @@ export class GameEngine {
   private update(deltaTime: number): void {
     const state = this.gameStore.getState();
     
+    // SAFETY: Double-check we should be updating
+    if (state.gameStatus !== 'playing' || this.levelTransitionActive) {
+      return; // Abort update if not in playing state
+    }
+    
     // Spawn new vegetables
     const newVegetables = this.spawner.update(deltaTime, state.level);
     this.vegetables.push(...newVegetables);
 
     // Update existing vegetables
     this.vegetables = this.vegetables.filter(vegetable => {
-      vegetable.y += vegetable.speed;
-      this.spawner.updateVegetablePosition(vegetable);
-
-      // Check collision with player
+      // Create new position to avoid mutation
+      const newY = vegetable.y + vegetable.speed;
+      
+      // CRITICAL: Check if we're still in playing state before any game logic
+      const currentGameState = this.gameStore.getState();
+      if (currentGameState.gameStatus !== 'playing' || this.levelTransitionActive) {
+        // Game state changed during this frame - remove vegetable silently
+        this.spawner.removeVegetable(vegetable.id);
+        return false;
+      }
+      
+      // Check collision BEFORE updating position
       const playerBounds = this.player.getBounds();
-      if (this.checkCollision(playerBounds, vegetable)) {
+      if (this.checkCollision(playerBounds, { ...vegetable, y: newY })) {
         // Caught vegetable
         this.audioManager.play('catch');
         state.updateScore(vegetable.points);
-        this.particles.createCatchEffect(vegetable.x, vegetable.y);
+        this.particles.createCatchEffect(vegetable.x, newY);
         this.spawner.removeVegetable(vegetable.id);
         
         // Add bounce animation to player
@@ -149,20 +170,24 @@ export class GameEngine {
         }
         
         // Score popup animation
-        this.createScorePopup(vegetable.x, vegetable.y, vegetable.points);
+        this.createScorePopup(vegetable.x, newY, vegetable.points);
         
-        return false;
+        return false; // Remove from array
       }
 
-      // Check if vegetable fell off screen
-      if (vegetable.y > this.container.clientHeight) {
+      // Check if vegetable will fall off screen
+      if (newY > this.container.clientHeight) {
         this.audioManager.play('miss');
         state.incrementMissed();
         this.spawner.removeVegetable(vegetable.id);
-        return false;
+        return false; // Remove from array
       }
 
-      return true;
+      // Update position only if vegetable continues
+      vegetable.y = newY;
+      this.spawner.updateVegetablePosition(vegetable);
+      
+      return true; // Keep in array
     });
 
     // Update particles
@@ -188,7 +213,7 @@ export class GameEngine {
     const vegetableSize = GameSettings.getVegetableSize();
     const overlapThreshold = 0.3; // 30% overlap required
     
-    // Calculate overlap areas
+    // Calculate overlap areas using min/max
     const xOverlap = Math.max(0, Math.min(player.x + player.width, vegetable.x + vegetableSize) - Math.max(player.x, vegetable.x));
     const yOverlap = Math.max(0, Math.min(player.y + player.height, vegetable.y + vegetableSize) - Math.max(player.y, vegetable.y));
     
@@ -202,15 +227,20 @@ export class GameEngine {
     return actualOverlap >= requiredOverlap;
   }
 
+  private clearAllVegetables(): void {
+    // CRITICAL: Clear game engine array FIRST to stop collision detection
+    this.vegetables = [];
+    
+    // Then clean up DOM and spawner
+    this.spawner.reset();
+  }
+
   private restart(): void {
+    // Clear all vegetables
+    this.clearAllVegetables();
+    
     // Reset game state
     this.gameStore.getState().resetGame();
-    
-    // Clear vegetables
-    this.vegetables.forEach(vegetable => {
-      this.spawner.removeVegetable(vegetable.id);
-    });
-    this.vegetables = [];
     
     // Hide game over screen
     this.gameOverScreen.hide();

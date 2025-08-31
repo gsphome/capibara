@@ -35,7 +35,7 @@ export class VegetableSpawner {
       type: type as any,
       x,
       y: -GameSettings.getVegetableSize(),
-      speed: 2 + (level * 0.3),
+      speed: this.calculateVegetableSpeed(type, level),
       points: this.getVegetablePoints(type)
     };
 
@@ -77,6 +77,19 @@ export class VegetableSpawner {
       element.style.top = `${vegetable.y}px`;
     }
   }
+  
+  public reset(): void {
+    // Clear all active vegetables from DOM immediately
+    this.activeVegetables.forEach(element => {
+      if (element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
+    });
+    this.activeVegetables.clear();
+    
+    // Reset spawn timer to prevent immediate spawning
+    this.spawnTimer = 0;
+  }
 
   public removeVegetable(id: string): void {
     const element = this.activeVegetables.get(id);
@@ -95,5 +108,22 @@ export class VegetableSpawner {
       pepper: 10
     };
     return points[type] || 5;
+  }
+  
+  private calculateVegetableSpeed(type: string, level: number): number {
+    // Base speed increases with level
+    const baseSpeed = 1.8 + (level * 0.25);
+    
+    // Speed multipliers based on points (risk vs reward)
+    const speedMultipliers: Record<string, number> = {
+      lettuce: 0.8,   // 3 pts - slowest (easy catch, low reward)
+      carrot: 1.0,    // 5 pts - normal speed
+      tomato: 1.1,    // 6 pts - slightly faster
+      broccoli: 1.25, // 8 pts - faster (harder catch, good reward)
+      pepper: 1.4     // 10 pts - fastest (hardest catch, best reward)
+    };
+    
+    const multiplier = speedMultipliers[type] || 1.0;
+    return baseSpeed * multiplier;
   }
 }
