@@ -8,6 +8,7 @@ export class LevelTransition {
   }
 
   public show(level: number): void {
+    console.log(`🎉 ¡Pasaste al nivel ${level}! ¡Felicidades!`);
     this.createElement(level);
     this.container.appendChild(this.element);
     

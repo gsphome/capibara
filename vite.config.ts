@@ -5,9 +5,13 @@ export default defineConfig({
   build: {
     target: 'es2015',
     minify: 'esbuild',
+    sourcemap: true,
   },
   server: {
     host: true,
     port: 3000,
+  },
+  esbuild: {
+    sourcemap: true,
   },
 });
