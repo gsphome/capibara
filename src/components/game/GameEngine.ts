@@ -185,12 +185,21 @@ export class GameEngine {
   }
 
   private checkCollision(player: any, vegetable: Vegetable): boolean {
-    return (
-      vegetable.x < player.x + player.width &&
-      vegetable.x + 30 > player.x &&
-      vegetable.y < player.y + player.height &&
-      vegetable.y + 30 > player.y
-    );
+    const vegetableSize = GameSettings.getVegetableSize();
+    const overlapThreshold = 0.3; // 30% overlap required
+    
+    // Calculate overlap areas
+    const xOverlap = Math.max(0, Math.min(player.x + player.width, vegetable.x + vegetableSize) - Math.max(player.x, vegetable.x));
+    const yOverlap = Math.max(0, Math.min(player.y + player.height, vegetable.y + vegetableSize) - Math.max(player.y, vegetable.y));
+    
+    // Calculate minimum overlap required (30% of smaller object)
+    const minArea = Math.min(player.width * player.height, vegetableSize * vegetableSize);
+    const requiredOverlap = minArea * overlapThreshold;
+    
+    // Check if actual overlap meets threshold
+    const actualOverlap = xOverlap * yOverlap;
+    
+    return actualOverlap >= requiredOverlap;
   }
 
   private restart(): void {
