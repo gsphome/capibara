@@ -51,16 +51,20 @@ export class GameEngine {
     this.setupKeyboardControls();
   }
 
+  private levelTransitionActive = false;
+
   private handleGameStateChange(state: GameState): void {
     if (state.gameStatus === 'paused') {
       this.pauseOverlay.show(() => this.gameStore.getState().resumeGame());
     } else if (state.gameStatus === 'playing') {
       this.pauseOverlay.hide();
-    } else if (state.gameStatus === 'won') {
+    } else if (state.gameStatus === 'won' && !this.levelTransitionActive) {
+      this.levelTransitionActive = true;
       this.levelTransition.show(state.level + 1);
       setTimeout(() => {
         this.gameStore.getState().incrementLevel();
         this.gameStore.getState().resetForNextLevel();
+        this.levelTransitionActive = false;
       }, 2000);
     } else if (state.gameStatus === 'lost') {
       this.gameOverScreen.show(false, state.score, state.level);
