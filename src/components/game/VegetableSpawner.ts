@@ -45,7 +45,7 @@ export class VegetableSpawner {
 
   private createVegetableElement(vegetable: Vegetable): void {
     const element = document.createElement('div');
-    element.className = `vegetable vegetable--${vegetable.type}`;
+    element.className = `vegetable vegetable--${vegetable.type} vegetable--spawning`;
     element.style.left = `${vegetable.x}px`;
     element.style.top = `${vegetable.y}px`;
     element.id = vegetable.id;
@@ -64,6 +64,11 @@ export class VegetableSpawner {
     
     this.container.appendChild(element);
     this.activeVegetables.set(vegetable.id, element);
+    
+    // Remove spawn animation class after animation completes
+    setTimeout(() => {
+      element.classList.remove('vegetable--spawning');
+    }, 300);
   }
 
   public updateVegetablePosition(vegetable: Vegetable): void {

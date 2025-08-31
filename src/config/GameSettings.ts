@@ -23,6 +23,18 @@ export class GameSettings {
   public static readonly MIN_SPAWN_RATE = 800;
   public static readonly LEVEL_UP_THRESHOLD = 50;
   
+  // Audio settings
+  public static readonly AUDIO_ENABLED_DEFAULT = true;
+  public static readonly MASTER_VOLUME = 0.6;
+  
+  // Animation settings
+  public static readonly ANIMATION_DURATION_FAST = 300;
+  public static readonly ANIMATION_DURATION_NORMAL = 600;
+  public static readonly ANIMATION_DURATION_SLOW = 1000;
+  
+  // Performance settings
+  public static readonly REDUCE_ANIMATIONS = false;
+  
   // Helper methods
   public static isMobile(): boolean {
     return window.innerWidth <= this.MOBILE_BREAKPOINT;

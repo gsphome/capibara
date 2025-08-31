@@ -267,15 +267,33 @@ class CapybaraCatcherGame {
       this.startGame();
     };
     
-    startButton.addEventListener('click', startGame);
-    startButton.addEventListener('touchend', (e) => {
+    startButton.addEventListener('click', async () => {
+      // Initialize audio on first user interaction
+      const audioManager = (await import('./audio/AudioManager')).AudioManager.getInstance();
+      await audioManager.init();
+      startGame();
+    });
+    
+    startButton.addEventListener('touchend', async (e) => {
       e.preventDefault();
+      // Initialize audio on first user interaction
+      const audioManager = (await import('./audio/AudioManager')).AudioManager.getInstance();
+      await audioManager.init();
       startGame();
     });
     
     // Help button interaction
     helpButton.addEventListener('click', () => {
       this.helpModal.show();
+    });
+    
+    // Add click sounds
+    startButton.addEventListener('click', () => {
+      // Audio will be initialized in GameEngine
+    });
+    
+    helpButton.addEventListener('click', () => {
+      // Audio will be initialized in GameEngine
     });
     
     // Prevent background interaction

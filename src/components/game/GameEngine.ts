@@ -8,6 +8,8 @@ import { GameOverScreen } from '../ui/GameOverScreen';
 import { LevelTransition } from '../ui/LevelTransition';
 import { PauseOverlay } from '../ui/PauseOverlay';
 import { HelpModal } from '../ui/HelpModal';
+import { AudioToggle } from '../ui/AudioToggle';
+import { AudioManager } from '../../audio/AudioManager';
 import type { Vegetable } from '../../types/game.types';
 
 export class GameEngine {
@@ -20,6 +22,8 @@ export class GameEngine {
   private levelTransition!: LevelTransition;
   private pauseOverlay!: PauseOverlay;
   private helpModal!: HelpModal;
+  private audioToggle!: AudioToggle;
+  private audioManager = AudioManager.getInstance();
   private animationId: number = 0;
   private lastTime: number = 0;
   private vegetables: Vegetable[] = [];
@@ -40,6 +44,7 @@ export class GameEngine {
     this.levelTransition = new LevelTransition(this.container);
     this.pauseOverlay = new PauseOverlay(this.container, () => this.helpModal.show());
     this.helpModal = new HelpModal();
+    this.audioToggle = new AudioToggle(document.body);
 
     // Subscribe to Zustand store changes
     useGameStore.subscribe((state) => this.handleGameStateChange(state));
@@ -60,6 +65,7 @@ export class GameEngine {
       this.pauseOverlay.hide();
     } else if (state.gameStatus === 'won' && !this.levelTransitionActive) {
       this.levelTransitionActive = true;
+      this.audioManager.play('levelup');
       this.levelTransition.show(state.level + 1);
       setTimeout(() => {
         this.gameStore.getState().incrementLevel();
@@ -67,6 +73,7 @@ export class GameEngine {
         this.levelTransitionActive = false;
       }, 2000);
     } else if (state.gameStatus === 'lost') {
+      this.audioManager.play('gameover');
       this.gameOverScreen.show(false, state.score, state.level);
     }
   }
@@ -126,6 +133,7 @@ export class GameEngine {
       const playerBounds = this.player.getBounds();
       if (this.checkCollision(playerBounds, vegetable)) {
         // Caught vegetable
+        this.audioManager.play('catch');
         state.updateScore(vegetable.points);
         this.particles.createCatchEffect(vegetable.x, vegetable.y);
         this.spawner.removeVegetable(vegetable.id);
@@ -136,14 +144,18 @@ export class GameEngine {
           playerElement.classList.add('capybara-player--catch');
           setTimeout(() => {
             playerElement.classList.remove('capybara-player--catch');
-          }, 500);
+          }, 600);
         }
+        
+        // Score popup animation
+        this.createScorePopup(vegetable.x, vegetable.y, vegetable.points);
         
         return false;
       }
 
       // Check if vegetable fell off screen
       if (vegetable.y > this.container.clientHeight) {
+        this.audioManager.play('miss');
         state.incrementMissed();
         this.spawner.removeVegetable(vegetable.id);
         return false;
@@ -198,6 +210,30 @@ export class GameEngine {
     this.player.updateFill(0);
   }
 
+  private createScorePopup(x: number, y: number, points: number): void {
+    const popup = document.createElement('div');
+    popup.className = 'score-popup';
+    popup.textContent = `+${points}`;
+    popup.style.cssText = `
+      position: absolute;
+      left: ${x}px;
+      top: ${y}px;
+      color: #FFD700;
+      font-weight: bold;
+      font-size: 1.2rem;
+      pointer-events: none;
+      z-index: 1000;
+    `;
+    
+    this.container.appendChild(popup);
+    
+    setTimeout(() => {
+      if (popup.parentNode) {
+        popup.parentNode.removeChild(popup);
+      }
+    }, 1000);
+  }
+
   public destroy(): void {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
@@ -207,5 +243,6 @@ export class GameEngine {
     this.particles.destroy();
     this.hud.destroy();
     this.gameOverScreen.destroy();
+    this.audioToggle.destroy();
   }
 }
