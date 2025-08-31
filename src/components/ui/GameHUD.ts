@@ -57,11 +57,17 @@ export class GameHUD {
     this.missedElement.className = 'game-hud__lives';
     this.updateLives(3);
 
-    this.element.appendChild(this.scoreElement);
-    this.element.appendChild(this.levelElement);
-    this.element.appendChild(this.missedElement);
+    // Create row for main buttons
+    const hudRow = document.createElement('div');
+    hudRow.className = 'game-hud__row';
     
-    // Progress bar
+    hudRow.appendChild(this.scoreElement);
+    hudRow.appendChild(this.levelElement);
+    hudRow.appendChild(this.missedElement);
+    
+    this.element.appendChild(hudRow);
+    
+    // Progress bar in second row
     const progressContainer = document.createElement('div');
     progressContainer.className = 'progress-bar';
     
