@@ -82,7 +82,10 @@ export class CapybaraPlayer {
       
       const rect = this.gameContainer.getBoundingClientRect();
       const relativeX = e.clientX - rect.left;
-      this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - 100, relativeX - 50));
+      const isMobile = window.innerWidth <= 768;
+      const capybaraWidth = isMobile ? 50 : 100;
+      const offset = capybaraWidth / 2;
+      this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - capybaraWidth, relativeX - offset));
       this.updatePosition();
     });
 
@@ -112,7 +115,10 @@ export class CapybaraPlayer {
       const touch = e.touches[0];
       const rect = this.gameContainer.getBoundingClientRect();
       const relativeX = touch.clientX - rect.left;
-      this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - 100, relativeX - 50));
+      const isMobile = window.innerWidth <= 768;
+      const capybaraWidth = isMobile ? 50 : 100;
+      const offset = capybaraWidth / 2;
+      this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - capybaraWidth, relativeX - offset));
       this.updatePosition();
       e.preventDefault();
     }, { passive: false });
@@ -128,7 +134,9 @@ export class CapybaraPlayer {
   }
 
   private moveRight(): void {
-    this.x = Math.min(this.gameContainer.clientWidth - 100, this.x + this.speed);
+    const isMobile = window.innerWidth <= 768;
+    const capybaraWidth = isMobile ? 50 : 100;
+    this.x = Math.min(this.gameContainer.clientWidth - capybaraWidth, this.x + this.speed);
     this.updatePosition();
   }
 
@@ -167,11 +175,16 @@ export class CapybaraPlayer {
   }
 
   public getBounds() {
+    const isMobile = window.innerWidth <= 768;
+    const width = isMobile ? 50 : 100;
+    const height = isMobile ? 38 : 75;
+    const bottomOffset = isMobile ? 48 : 95; // Mobile: 10px (bottom) + 38px (height), Desktop: 20px (bottom) + 75px (height)
+    
     return {
       x: this.x,
-      y: this.gameContainer.clientHeight - 145,
-      width: 100,
-      height: 75
+      y: this.gameContainer.clientHeight - bottomOffset,
+      width,
+      height
     };
   }
 

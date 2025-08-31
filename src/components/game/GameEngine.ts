@@ -144,7 +144,7 @@ export class GameEngine {
     // Update UI
     this.hud.updateScore(gameState.score);
     this.hud.updateLevel(gameState.level);
-    this.hud.updateMissed(gameState.missedVegetables);
+    this.hud.updateLives(3 - gameState.missedVegetables);
     this.hud.updateProgress(gameState.capybaraFillPercentage);
     this.player.updateFill(gameState.capybaraFillPercentage);
 
@@ -181,7 +181,7 @@ export class GameEngine {
     // Reset UI
     this.hud.updateScore(0);
     this.hud.updateLevel(1);
-    this.hud.updateMissed(0);
+    this.hud.updateLives(3);
     this.hud.updateProgress(0);
     this.player.updateFill(0);
   }

@@ -45,17 +45,17 @@ export class GameHUD {
     // Score display
     this.scoreElement = document.createElement('div');
     this.scoreElement.className = 'game-hud__score';
-    this.scoreElement.textContent = 'Score: 0';
+    this.scoreElement.innerHTML = 'Score<br>0';
 
     // Level display
     this.levelElement = document.createElement('div');
     this.levelElement.className = 'game-hud__level';
-    this.levelElement.textContent = 'Level: 1';
+    this.levelElement.innerHTML = 'Level<br>1';
 
-    // Missed vegetables display
+    // Lives display
     this.missedElement = document.createElement('div');
-    this.missedElement.className = 'game-hud__missed';
-    this.missedElement.textContent = 'Missed: 0/3';
+    this.missedElement.className = 'game-hud__lives';
+    this.updateLives(3);
 
     this.element.appendChild(this.scoreElement);
     this.element.appendChild(this.levelElement);
@@ -78,20 +78,23 @@ export class GameHUD {
   }
 
   public updateScore(score: number): void {
-    this.scoreElement.textContent = `Score: ${score}`;
+    this.scoreElement.innerHTML = `Score<br>${score}`;
   }
 
   public updateLevel(level: number): void {
-    this.levelElement.textContent = `Level: ${level}`;
+    this.levelElement.innerHTML = `Level<br>${level}`;
   }
 
-  public updateMissed(missed: number): void {
-    this.missedElement.textContent = `Missed: ${missed}/3`;
-    if (missed >= 2) {
-      this.missedElement.style.color = '#ff4444';
-    } else {
-      this.missedElement.style.color = 'white';
+  public updateLives(lives: number): void {
+    const hearts = [];
+    for (let i = 0; i < 3; i++) {
+      if (i < lives) {
+        hearts.push('❤️');
+      } else {
+        hearts.push('🤍');
+      }
     }
+    this.missedElement.innerHTML = hearts.join(' ');
   }
 
   public updateProgress(percentage: number): void {

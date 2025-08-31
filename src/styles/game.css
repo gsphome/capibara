@@ -13,9 +13,9 @@ body {
 .game-wrapper {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 30px;
-  padding: 20px;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
   background: rgba(255,255,255,0.05);
   border-radius: 25px;
   backdrop-filter: blur(10px);
@@ -75,7 +75,7 @@ body {
 /* Capybara Player */
 .capybara-player {
   position: absolute;
-  bottom: 70px;
+  bottom: 20px;
   width: 100px;
   height: 75px;
   transition: left 0.1s ease-out;
@@ -192,15 +192,16 @@ body {
 .game-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  min-width: 200px;
+  gap: 10px;
+  min-width: 180px;
+  align-self: flex-start;
 }
 
 /* UI Elements */
 .game-hud {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   z-index: 20;
   color: white;
   font-weight: bold;
@@ -209,33 +210,47 @@ body {
 
 .game-hud__score,
 .game-hud__level,
-.game-hud__missed {
-  background: rgba(0,0,0,0.3);
+.game-hud__lives,
+.progress-bar {
+  background: rgba(0,0,0,0.4);
   padding: 8px 16px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: left;
+  line-height: 1.2;
+  height: 40px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.game-hud__lives {
+  font-size: 18px;
+  line-height: 1;
+  text-align: center;
 }
 
 /* Progress Bar */
 .progress-bar {
-  background: rgba(0,0,0,0.3);
-  padding: 8px 16px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
   position: relative;
-  height: 20px;
   overflow: hidden;
 }
 
 .progress-bar::before {
-  content: 'Fullness: ';
+  content: 'Fullness';
   position: absolute;
-  left: 16px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 14px;
+  font-size: 13px;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   z-index: 1;
 }
 
@@ -447,54 +462,116 @@ body {
 @media (max-width: 1024px) {
   .game-wrapper {
     flex-direction: column;
-    gap: 20px;
+    gap: 5px;
+    padding: 5px;
   }
   
   .game-sidebar {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    right: 5px;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
     min-width: auto;
-    width: 100%;
+    width: auto;
+    background: rgba(0,0,0,0.5);
+    padding: 8px 12px;
+    border-radius: 18px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    z-index: 30;
+  }
+  
+  .game-hud {
+    flex-direction: row;
+    gap: 8px;
+    font-size: 12px;
+  }
+  
+  .progress-bar {
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 250px;
+    height: 15px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    z-index: 30;
+  }
+  
+  .progress-bar::before {
+    font-size: 9px;
+    left: 8px;
   }
   
   .capybara-game {
-    width: 90vw;
+    width: 95vw;
     max-width: 500px;
-    height: 60vh;
-    max-height: 350px;
+    height: 70vh;
+    max-height: 400px;
+    margin-top: 20px;
   }
 }
 
 @media (max-width: 768px) {
   .capybara-player {
-    width: 60px;
-    height: 45px;
-    bottom: 40px;
+    width: 50px;
+    height: 38px;
+    bottom: 10px;
   }
 
   .vegetable {
-    width: 25px;
-    height: 25px;
+    width: 22px;
+    height: 22px;
   }
 
   .game-hud__score,
   .game-hud__level,
-  .game-hud__missed {
-    padding: 6px 12px;
+  .game-hud__lives {
+    padding: 6px 4px;
+    font-size: 11px;
+    border-radius: 12px;
+    font-weight: 600;
+    width: 50%;
+    max-width: 60px;
+  }
+  
+  .progress-bar {
+    padding: 6px 4px;
+    font-size: 11px;
+    border-radius: 12px;
+    width: 50%;
+    max-width: 60px;
+  }
+  
+  .game-hud__lives {
     font-size: 12px;
   }
 
   .progress-bar {
-    width: 120px;
-    height: 15px;
+    width: 180px;
+    height: 12px;
+  }
+
+  .progress-bar::before {
+    font-size: 9px;
+  }
+
+  .capybara-game {
+    height: 65vh;
+    max-height: 350px;
   }
 
   .game-over__title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .game-over__score {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }
 
