@@ -5,6 +5,12 @@ export class AudioToggle {
   private audioManager = AudioManager.getInstance();
   
   constructor(container: HTMLElement) {
+    // Remove any existing audio toggle first
+    const existing = container.querySelector('.audio-toggle');
+    if (existing) {
+      existing.remove();
+    }
+    
     this.createElement();
     container.appendChild(this.element);
   }
@@ -28,14 +34,20 @@ export class AudioToggle {
       transition: all 0.2s ease;
       backdrop-filter: blur(10px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      touch-action: manipulation;
     `;
     
-    this.element.addEventListener('click', async () => {
-      await this.audioManager.init(); // Ensure audio is initialized
-      this.audioManager.play('click');
-      const enabled = this.audioManager.toggle();
-      this.element.innerHTML = enabled ? '🔊' : '🔇';
-      this.element.style.opacity = enabled ? '1' : '0.6';
+    // Prevent event bubbling to avoid conflicts
+    this.element.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      this.toggleAudio();
+    });
+    
+    this.element.addEventListener('touchend', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      this.toggleAudio();
     });
     
     this.element.addEventListener('mouseenter', () => {
@@ -45,6 +57,21 @@ export class AudioToggle {
     this.element.addEventListener('mouseleave', () => {
       this.element.style.transform = 'scale(1)';
     });
+  }
+  
+  private async toggleAudio(): Promise<void> {
+    try {
+      const enabled = this.audioManager.toggle();
+      this.element.innerHTML = enabled ? '🔊' : '🔇';
+      this.element.style.opacity = enabled ? '1' : '0.6';
+      
+      if (enabled) {
+        await this.audioManager.init();
+        await this.audioManager.play('click');
+      }
+    } catch (error) {
+      console.warn('Audio toggle failed:', error);
+    }
   }
   
   public destroy(): void {

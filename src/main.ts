@@ -1,11 +1,13 @@
 import './styles/game.css';
 import { GameEngine } from './components/game/GameEngine';
 import { HelpModal } from './components/ui/HelpModal';
+import { AudioToggle } from './components/ui/AudioToggle';
 
 class CapybaraCatcherGame {
   private gameEngine: GameEngine | null = null;
   private container!: HTMLElement;
   private helpModal!: HelpModal;
+  private audioToggle!: AudioToggle;
 
   constructor() {
     this.init();
@@ -19,8 +21,9 @@ class CapybaraCatcherGame {
     this.container = document.createElement('div');
     this.container.className = 'capybara-game';
     
-    // Initialize help modal
+    // Initialize help modal and audio toggle
     this.helpModal = new HelpModal();
+    this.audioToggle = new AudioToggle(document.body);
     
     // Add instructions
     this.showInstructions();

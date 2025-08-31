@@ -9,7 +9,7 @@ import { GameOverScreen } from '../ui/GameOverScreen';
 import { LevelTransition } from '../ui/LevelTransition';
 import { PauseOverlay } from '../ui/PauseOverlay';
 import { HelpModal } from '../ui/HelpModal';
-import { AudioToggle } from '../ui/AudioToggle';
+
 import { AudioManager } from '../../audio/AudioManager';
 import type { Vegetable } from '../../types/game.types';
 
@@ -23,7 +23,7 @@ export class GameEngine {
   private levelTransition!: LevelTransition;
   private pauseOverlay!: PauseOverlay;
   private helpModal!: HelpModal;
-  private audioToggle!: AudioToggle;
+
   private audioManager = AudioManager.getInstance();
   private animationId: number = 0;
   private lastTime: number = 0;
@@ -45,7 +45,7 @@ export class GameEngine {
     this.levelTransition = new LevelTransition(this.container);
     this.pauseOverlay = new PauseOverlay(this.container, () => this.helpModal.show());
     this.helpModal = new HelpModal();
-    this.audioToggle = new AudioToggle(document.body);
+
 
     // Subscribe to Zustand store changes
     useGameStore.subscribe((state) => this.handleGameStateChange(state));
@@ -286,6 +286,6 @@ export class GameEngine {
     this.particles.destroy();
     this.hud.destroy();
     this.gameOverScreen.destroy();
-    this.audioToggle.destroy();
+
   }
 }
