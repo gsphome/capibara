@@ -1,4 +1,5 @@
-import { gameState } from '../../stores/GameState';
+import { useGameStore } from '../../stores/useGameStore';
+import type { GameState } from '../../stores/useGameStore';
 import { CapybaraPlayer } from './CapybaraPlayer';
 import { VegetableSpawner } from './VegetableSpawner';
 import { ParticleSystem } from '../effects/ParticleSystem';
@@ -20,6 +21,7 @@ export class GameEngine {
   private animationId: number = 0;
   private lastTime: number = 0;
   private vegetables: Vegetable[] = [];
+  private gameStore = useGameStore;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -36,8 +38,8 @@ export class GameEngine {
     this.levelTransition = new LevelTransition(this.container);
     this.pauseOverlay = new PauseOverlay(this.container);
 
-    // Listen to game state changes
-    gameState.addListener(() => this.handleGameStateChange());
+    // Subscribe to Zustand store changes
+    useGameStore.subscribe((state) => this.handleGameStateChange(state));
 
     // Start game loop
     this.gameLoop(0);
@@ -46,19 +48,18 @@ export class GameEngine {
     this.setupKeyboardControls();
   }
 
-  private handleGameStateChange(): void {
-    if (gameState.gameStatus === 'paused') {
-      this.pauseOverlay.show(() => gameState.resumeGame());
-    } else if (gameState.gameStatus === 'playing') {
+  private handleGameStateChange(state: GameState): void {
+    if (state.gameStatus === 'paused') {
+      this.pauseOverlay.show(() => this.gameStore.getState().resumeGame());
+    } else if (state.gameStatus === 'playing') {
       this.pauseOverlay.hide();
-    } else if (gameState.gameStatus === 'won') {
-      this.levelTransition.show(gameState.level);
+    } else if (state.gameStatus === 'won') {
+      this.levelTransition.show(state.level);
       setTimeout(() => {
-        gameState.resetForNextLevel();
-        gameState.gameStatus = 'playing';
+        this.gameStore.getState().resetForNextLevel();
       }, 2000);
-    } else if (gameState.gameStatus === 'lost') {
-      this.gameOverScreen.show(false, gameState.score, gameState.level);
+    } else if (state.gameStatus === 'lost') {
+      this.gameOverScreen.show(false, state.score, state.level);
     }
   }
 
@@ -68,15 +69,17 @@ export class GameEngine {
         case ' ':
         case 'Escape':
           e.preventDefault();
-          if (gameState.gameStatus === 'playing') {
-            gameState.pauseGame();
-          } else if (gameState.gameStatus === 'paused') {
-            gameState.resumeGame();
+          const currentState = this.gameStore.getState();
+          if (currentState.gameStatus === 'playing') {
+            currentState.pauseGame();
+          } else if (currentState.gameStatus === 'paused') {
+            currentState.resumeGame();
           }
           break;
         case 'r':
         case 'R':
-          if (gameState.gameStatus === 'lost' || gameState.gameStatus === 'won') {
+          const state = this.gameStore.getState();
+          if (state.gameStatus === 'lost' || state.gameStatus === 'won') {
             this.restart();
           }
           break;
@@ -88,10 +91,11 @@ export class GameEngine {
     const deltaTime = currentTime - this.lastTime;
     this.lastTime = currentTime;
 
-    if (gameState.gameStatus === 'playing') {
+    const currentState = this.gameStore.getState();
+    if (currentState.gameStatus === 'playing') {
       this.update(deltaTime);
       this.render();
-    } else if (gameState.gameStatus === 'paused') {
+    } else if (currentState.gameStatus === 'paused') {
       // Game is paused, don't update but keep rendering
     }
 
@@ -99,8 +103,10 @@ export class GameEngine {
   }
 
   private update(deltaTime: number): void {
+    const state = this.gameStore.getState();
+    
     // Spawn new vegetables
-    const newVegetables = this.spawner.update(deltaTime, gameState.level);
+    const newVegetables = this.spawner.update(deltaTime, state.level);
     this.vegetables.push(...newVegetables);
 
     // Update existing vegetables
@@ -112,7 +118,7 @@ export class GameEngine {
       const playerBounds = this.player.getBounds();
       if (this.checkCollision(playerBounds, vegetable)) {
         // Caught vegetable
-        gameState.updateScore(vegetable.points);
+        state.updateScore(vegetable.points);
         this.particles.createCatchEffect(vegetable.x, vegetable.y);
         this.spawner.removeVegetable(vegetable.id);
         
@@ -130,7 +136,7 @@ export class GameEngine {
 
       // Check if vegetable fell off screen
       if (vegetable.y > this.container.clientHeight) {
-        gameState.incrementMissed();
+        state.incrementMissed();
         this.spawner.removeVegetable(vegetable.id);
         return false;
       }
@@ -141,15 +147,13 @@ export class GameEngine {
     // Update particles
     this.particles.update();
 
-    // Update UI
-    this.hud.updateScore(gameState.score);
-    this.hud.updateLevel(gameState.level);
-    this.hud.updateLives(3 - gameState.missedVegetables);
-    this.hud.updateProgress(gameState.capybaraFillPercentage);
-    this.player.updateFill(gameState.capybaraFillPercentage);
-
-    // Level progression is handled by capybara fill reaching 100%
-    // No need to check score thresholds here
+    // Update UI with current state
+    const currentState = this.gameStore.getState();
+    this.hud.updateScore(currentState.score);
+    this.hud.updateLevel(currentState.level);
+    this.hud.updateLives(3 - currentState.missedVegetables);
+    this.hud.updateProgress(currentState.capybaraFillPercentage);
+    this.player.updateFill(currentState.capybaraFillPercentage);
   }
 
   private render(): void {
@@ -167,7 +171,7 @@ export class GameEngine {
 
   private restart(): void {
     // Reset game state
-    gameState.resetGame();
+    this.gameStore.getState().resetGame();
     
     // Clear vegetables
     this.vegetables.forEach(vegetable => {

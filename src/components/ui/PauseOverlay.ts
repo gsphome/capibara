@@ -41,6 +41,10 @@ export class PauseOverlay {
         </button>
         <div class="pause-overlay__hint">
           <small>💡 Tip: Press SPACE to pause/resume anytime</small>
+          <br>
+          <a href="vegetable-preview.html" target="_blank" class="pause-overlay__help-btn">
+            🥕 Vegetable Guide
+          </a>
         </div>
       </div>
     `;

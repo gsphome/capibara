@@ -1,225 +1,197 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vista Previa de Vegetales - Capybara Catcher</title>
+    <title>🥕 Vegetable Guide - Capybara Catcher</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+        * {
             margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        body {
+            background: linear-gradient(135deg, #2C3E50, #34495E);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .guide-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
         
         h1 {
             text-align: center;
-            color: #2E8B57;
-            margin-bottom: 30px;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
-        .vegetables-grid {
+        .vegetable-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .vegetable-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease;
         }
         
         .vegetable-card:hover {
             transform: translateY(-5px);
+            background: rgba(255,255,255,0.1);
         }
         
         .vegetable-icon {
             width: 60px;
             height: 60px;
-            margin: 0 auto 10px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .vegetable-name {
+            font-size: 1.3rem;
             font-weight: bold;
-            color: #2E8B57;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
+            color: #32CD32;
         }
         
         .vegetable-points {
-            color: #FF6347;
-            font-size: 14px;
+            font-size: 1.1rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
         }
         
-        .game-info {
-            background: #f0f8ff;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #32CD32;
+        .vegetable-description {
+            font-size: 0.9rem;
+            color: #E0E0E0;
+            line-height: 1.4;
         }
         
-        .start-button {
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-            padding: 15px;
-            background: #32CD32;
+        .back-button {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            background: linear-gradient(45deg, #32CD32, #228B22);
             color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
             text-decoration: none;
-            text-align: center;
-            border-radius: 25px;
+            display: inline-block;
+            transition: all 0.2s ease;
             font-weight: bold;
-            transition: background 0.3s ease;
+            box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
         }
         
-        .start-button:hover {
-            background: #228B22;
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(50, 205, 50, 0.4);
+        }
+        
+        .tips {
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid #32CD32;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .tips h3 {
+            color: #32CD32;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .vegetable-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .guide-container {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🦫 Capybara Catcher - Vegetales</h1>
+    <div class="guide-container">
+        <h1>🥕 Vegetable Guide</h1>
         
-        <div class="vegetables-grid">
+        <div class="vegetable-grid">
             <div class="vegetable-card">
-                <div class="vegetable-icon">
-                    <svg viewBox="0 0 30 30">
-                        <use href="#carrot"></use>
-                    </svg>
-                </div>
-                <div class="vegetable-name">Zanahoria</div>
-                <div class="vegetable-points">5 puntos</div>
+                <div class="vegetable-icon">🥕</div>
+                <div class="vegetable-name">Carrot</div>
+                <div class="vegetable-points">5 Points</div>
+                <div class="vegetable-description">Classic orange vegetable with green leaves. Easy to spot and catch!</div>
             </div>
             
             <div class="vegetable-card">
-                <div class="vegetable-icon">
-                    <svg viewBox="0 0 30 30">
-                        <use href="#broccoli"></use>
-                    </svg>
-                </div>
-                <div class="vegetable-name">Brócoli</div>
-                <div class="vegetable-points">8 puntos</div>
+                <div class="vegetable-icon">🥦</div>
+                <div class="vegetable-name">Broccoli</div>
+                <div class="vegetable-points">8 Points</div>
+                <div class="vegetable-description">Green tree-like vegetable. Worth more points for its nutritional value!</div>
             </div>
             
             <div class="vegetable-card">
-                <div class="vegetable-icon">
-                    <svg viewBox="0 0 30 30">
-                        <use href="#lettuce"></use>
-                    </svg>
-                </div>
-                <div class="vegetable-name">Lechuga</div>
-                <div class="vegetable-points">3 puntos</div>
+                <div class="vegetable-icon">🥬</div>
+                <div class="vegetable-name">Lettuce</div>
+                <div class="vegetable-points">3 Points</div>
+                <div class="vegetable-description">Light green leafy vegetable. Quick and easy catch for beginners.</div>
             </div>
             
             <div class="vegetable-card">
-                <div class="vegetable-icon">
-                    <svg viewBox="0 0 30 30">
-                        <use href="#tomato"></use>
-                    </svg>
-                </div>
-                <div class="vegetable-name">Tomate</div>
-                <div class="vegetable-points">6 puntos</div>
+                <div class="vegetable-icon">🍅</div>
+                <div class="vegetable-name">Tomato</div>
+                <div class="vegetable-points">6 Points</div>
+                <div class="vegetable-description">Red round fruit (technically!). Good balance of points and frequency.</div>
             </div>
             
             <div class="vegetable-card">
-                <div class="vegetable-icon">
-                    <svg viewBox="0 0 30 30">
-                        <use href="#pepper"></use>
-                    </svg>
-                </div>
-                <div class="vegetable-name">Pimiento</div>
-                <div class="vegetable-points">10 puntos</div>
+                <div class="vegetable-icon">🌶️</div>
+                <div class="vegetable-name">Bell Pepper</div>
+                <div class="vegetable-points">10 Points</div>
+                <div class="vegetable-description">The most valuable catch! Orange bell pepper worth the most points.</div>
             </div>
         </div>
         
-        <div class="game-info">
-            <h3>🎮 Cómo Jugar:</h3>
-            <ul>
-                <li><strong>Objetivo:</strong> Ayuda al capibara a atrapar vegetales y llenarlo al 100%</li>
-                <li><strong>Controles:</strong> Ratón, teclado (flechas/WASD) o táctil</li>
-                <li><strong>Cuidado:</strong> ¡No dejes caer 3 vegetales o perderás!</li>
-                <li><strong>Progresión:</strong> Cada 100 puntos aumenta el nivel y la dificultad</li>
+        <div class="tips">
+            <h3>💡 Pro Tips</h3>
+            <ul style="margin-left: 1rem; line-height: 1.6;">
+                <li>Focus on Bell Peppers (10 pts) for maximum score</li>
+                <li>Don't miss 3 vegetables or it's game over!</li>
+                <li>Fill the capybara to 100% to advance levels</li>
+                <li>Higher levels = faster falling vegetables</li>
             </ul>
         </div>
         
-        <a href="./index.html" class="start-button">🚀 Jugar Ahora</a>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="index.html" class="back-button">🎮 Back to Game</a>
+        </div>
     </div>
-
-    <!-- SVG Sprites -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="carrot" viewBox="0 0 30 30">
-            <path d="M15 2 L12 8 L8 12 L10 18 L15 28 L20 18 L22 12 L18 8 Z" 
-                  fill="#FF8C00" stroke="#E67300" stroke-width="1"/>
-            <path d="M15 2 L13 6 L11 10 L12 16 L15 24 L18 16 L19 10 L17 6 Z" 
-                  fill="#FFA500"/>
-            <path d="M15 2 Q12 0 10 2 Q13 1 15 2" fill="#228B22"/>
-            <path d="M15 2 Q18 0 20 2 Q17 1 15 2" fill="#228B22"/>
-            <path d="M15 2 Q14 -1 16 1 Q15 0 15 2" fill="#32CD32"/>
-        </symbol>
-        
-        <symbol id="broccoli" viewBox="0 0 30 30">
-            <rect x="13" y="20" width="4" height="8" fill="#90EE90" rx="2"/>
-            <circle cx="15" cy="12" r="6" fill="#228B22"/>
-            <circle cx="11" cy="10" r="4" fill="#32CD32"/>
-            <circle cx="19" cy="10" r="4" fill="#32CD32"/>
-            <circle cx="9" cy="15" r="3" fill="#228B22"/>
-            <circle cx="21" cy="15" r="3" fill="#228B22"/>
-            <circle cx="15" cy="8" r="3" fill="#006400"/>
-            <circle cx="12" cy="16" r="2.5" fill="#32CD32"/>
-            <circle cx="18" cy="16" r="2.5" fill="#32CD32"/>
-            <circle cx="15" cy="12" r="2" fill="#006400"/>
-            <circle cx="13" cy="9" r="1.5" fill="#228B22"/>
-            <circle cx="17" cy="9" r="1.5" fill="#228B22"/>
-        </symbol>
-        
-        <symbol id="lettuce" viewBox="0 0 30 30">
-            <path d="M15 5 Q8 8 6 15 Q8 22 15 25 Q22 22 24 15 Q22 8 15 5 Z" 
-                  fill="#90EE90" stroke="#7CCD7C" stroke-width="1"/>
-            <path d="M15 8 Q10 10 9 15 Q10 20 15 22 Q20 20 21 15 Q20 10 15 8 Z" 
-                  fill="#98FB98"/>
-            <path d="M15 8 L15 22" stroke="#7CCD7C" stroke-width="0.5"/>
-            <path d="M12 10 Q15 12 12 18" stroke="#7CCD7C" stroke-width="0.5" fill="none"/>
-            <path d="M18 10 Q15 12 18 18" stroke="#7CCD7C" stroke-width="0.5" fill="none"/>
-            <ellipse cx="15" cy="15" rx="3" ry="4" fill="#ADFF2F"/>
-        </symbol>
-        
-        <symbol id="tomato" viewBox="0 0 30 30">
-            <circle cx="15" cy="16" r="10" fill="#FF6347"/>
-            <ellipse cx="12" cy="13" rx="3" ry="4" fill="#FF7F50" opacity="0.7"/>
-            <ellipse cx="15" cy="8" rx="4" ry="2" fill="#228B22"/>
-            <rect x="14" y="6" width="2" height="3" fill="#32CD32"/>
-            <path d="M11 8 Q10 6 12 7 Q13 8 11 8" fill="#228B22"/>
-            <path d="M19 8 Q20 6 18 7 Q17 8 19 8" fill="#228B22"/>
-            <path d="M15 7 Q14 5 16 6 Q15 7 15 7" fill="#228B22"/>
-            <path d="M13 8 Q12 6 14 7 Q13 8 13 8" fill="#228B22"/>
-            <path d="M17 8 Q18 6 16 7 Q17 8 17 8" fill="#228B22"/>
-        </symbol>
-        
-        <symbol id="pepper" viewBox="0 0 30 30">
-            <path d="M15 6 Q10 8 8 15 Q9 22 12 26 Q15 28 18 26 Q21 22 22 15 Q20 8 15 6 Z" 
-                  fill="#FF0000"/>
-            <path d="M15 8 Q12 10 11 15 Q12 20 14 24 Q15 25 16 24 Q18 20 19 15 Q18 10 15 8 Z" 
-                  fill="#FF4500" opacity="0.6"/>
-            <ellipse cx="15" cy="6" rx="2" ry="1.5" fill="#228B22"/>
-            <rect x="14.5" y="4" width="1" height="3" fill="#32CD32"/>
-            <path d="M15 6 Q18 8 20 12 Q19 16 17 20" stroke="#DC143C" stroke-width="1" fill="none"/>
-        </symbol>
-    </svg>
 </body>
 </html>

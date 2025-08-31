@@ -1,4 +1,5 @@
 import type { Vegetable } from '../types/game.types';
+import { GameSettings } from '../config/GameSettings';
 
 interface PlayerBounds {
   x: number;
@@ -14,9 +15,9 @@ export const useCollision = () => {
   ): boolean => {
     return (
       vegetable.x < player.x + player.width &&
-      vegetable.x + 30 > player.x &&
+      vegetable.x + GameSettings.VEGETABLE_SIZE > player.x &&
       vegetable.y < player.y + player.height &&
-      vegetable.y + 30 > player.y
+      vegetable.y + GameSettings.VEGETABLE_SIZE > player.y
     );
   };
 

@@ -209,30 +209,40 @@ class CapybaraCatcherGame {
     `;
     
     instructions.innerHTML = `
-      <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px; max-width: 400px; text-align: center;">
-        <h1 style="font-size: 2.5rem; margin: 0 0 1rem 0;">🦫 Capybara Catcher</h1>
-        <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Help the hungry capybara catch falling vegetables!</p>
-        <div style="margin: 1rem 0; font-size: 1rem;">
-          <p><strong>Controls:</strong></p>
-          <p>🖱️ Mouse: Move to follow cursor</p>
-          <p>⌨️ Keyboard: Arrow keys or A/D</p>
-          <p>📱 Mobile: Touch and drag</p>
-        </div>
-        <div style="margin: 1.5rem 0; font-size: 1rem;">
-          <p><strong>Goal:</strong> Fill the capybara to 100%</p>
+      <div style="background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 20px; width: 350px; max-width: 90vw; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+        <h1 style="font-size: 2rem; margin: 0 0 0.8rem 0; color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🦫 Capybara Catcher</h1>
+        <p style="font-size: 1rem; margin-bottom: 1rem; color: #E0E0E0; line-height: 1.4;">Help the hungry capybara<br>catch falling vegetables!</p>
+        <div style="margin: 0.8rem 0; font-size: 0.9rem;">
+          <p><strong>Controls:</strong> Mouse/Keys/Touch</p>
+          <p><strong>Goal:</strong> Fill capybara to 100%</p>
           <p><strong>Warning:</strong> Don't miss 3 vegetables!</p>
         </div>
+        <div style="margin: 1rem 0;">
+          <a href="vegetable-preview.html" target="_blank" style="
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+          " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🥕 Vegetable Guide</a>
+        </div>
       <button id="startGame" style="
-        padding: 16px 32px;
-        font-size: 1.4rem;
-        background: #32CD32;
+        padding: 12px 24px;
+        font-size: 1.2rem;
+        background: linear-gradient(45deg, #32CD32, #228B22);
         color: white;
         border: none;
-        border-radius: 25px;
+        border-radius: 20px;
         cursor: pointer;
         margin-top: 1rem;
-        min-height: 60px;
-        min-width: 200px;
+        min-height: 45px;
+        min-width: 160px;
+        font-weight: bold;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);

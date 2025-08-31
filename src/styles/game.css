@@ -126,8 +126,8 @@ body {
 /* Vegetables */
 .vegetable {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   z-index: 5;
   transition: top 0.016s linear;
   display: flex;
@@ -348,42 +348,44 @@ body {
   background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 20px;
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   text-align: center;
   color: white;
-  min-width: 300px;
+  width: 320px;
+  max-width: 90vw;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  backdrop-filter: blur(15px);
 }
 
 .pause-overlay__icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
   animation: pausePulse 2s ease-in-out infinite;
 }
 
 .pause-overlay__content h2 {
-  font-size: 2rem;
-  margin: 0 0 1rem 0;
+  font-size: 1.6rem;
+  margin: 0 0 0.8rem 0;
   color: #FFD700;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .pause-overlay__content p {
-  font-size: 1.1rem;
-  margin: 0 0 2rem 0;
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
   color: #E0E0E0;
 }
 
 .pause-overlay__resume-btn {
-  padding: 16px 32px;
-  font-size: 1.3rem;
+  padding: 12px 24px;
+  font-size: 1.1rem;
   background: linear-gradient(45deg, #32CD32, #228B22);
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: 20px;
   cursor: pointer;
-  min-height: 60px;
-  min-width: 200px;
+  min-height: 45px;
+  min-width: 160px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
@@ -403,6 +405,25 @@ body {
 .pause-overlay__hint {
   margin-top: 1.5rem;
   opacity: 0.7;
+}
+
+.pause-overlay__help-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 15px;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.pause-overlay__help-btn:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-1px);
 }
 
 .pause-overlay__hint small {
@@ -531,8 +552,8 @@ body {
   }
 
   .vegetable {
-    width: 22px;
-    height: 22px;
+    width: 40px;
+    height: 40px;
   }
 
   .game-hud__score,
