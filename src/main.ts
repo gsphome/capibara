@@ -267,20 +267,22 @@ class CapybaraCatcherGame {
       this.startGame();
     };
     
-    startButton.addEventListener('click', async () => {
-      // Initialize audio on first user interaction
-      const audioManager = (await import('./audio/AudioManager')).AudioManager.getInstance();
-      await audioManager.init();
+    const initAudioAndStart = async (e?: Event) => {
+      if (e) e.preventDefault();
+      try {
+        // Initialize audio on first user interaction (Safari mobile fix)
+        const audioManager = (await import('./audio/AudioManager')).AudioManager.getInstance();
+        await audioManager.init();
+        // Play a test sound to unlock audio
+        await audioManager.play('click');
+      } catch (error) {
+        console.warn('Audio initialization failed:', error);
+      }
       startGame();
-    });
+    };
     
-    startButton.addEventListener('touchend', async (e) => {
-      e.preventDefault();
-      // Initialize audio on first user interaction
-      const audioManager = (await import('./audio/AudioManager')).AudioManager.getInstance();
-      await audioManager.init();
-      startGame();
-    });
+    startButton.addEventListener('click', initAudioAndStart);
+    startButton.addEventListener('touchend', initAudioAndStart);
     
     // Help button interaction
     helpButton.addEventListener('click', () => {

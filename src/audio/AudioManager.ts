@@ -2,6 +2,11 @@ export class AudioManager {
   private static instance: AudioManager;
   private enabled: boolean = true;
   private audioContext: AudioContext | null = null;
+  private initialized: boolean = false;
+  
+  private constructor() {
+    this.setupMobileAudioInit();
+  }
   
   public static getInstance(): AudioManager {
     if (!AudioManager.instance) {
@@ -10,18 +15,46 @@ export class AudioManager {
     return AudioManager.instance;
   }
   
+  private setupMobileAudioInit(): void {
+    // Auto-initialize audio on first user interaction (Safari mobile fix)
+    const initAudio = async () => {
+      if (!this.initialized) {
+        await this.init();
+        this.initialized = true;
+        // Remove listeners after first init
+        document.removeEventListener('touchstart', initAudio);
+        document.removeEventListener('click', initAudio);
+      }
+    };
+    
+    document.addEventListener('touchstart', initAudio, { once: true });
+    document.addEventListener('click', initAudio, { once: true });
+  }
+  
   public async play(name: string): Promise<void> {
     if (!this.enabled) return;
     
     try {
+      // Initialize if not done yet
+      if (!this.initialized) {
+        await this.init();
+        this.initialized = true;
+      }
+      
       // Reuse existing context or create new one
       if (!this.audioContext || this.audioContext.state === 'closed') {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
       
-      // Resume context if suspended (browser autoplay policy)
+      // Resume context if suspended (Safari mobile requirement)
       if (this.audioContext.state === 'suspended') {
         await this.audioContext.resume();
+      }
+      
+      // Double-check context is running
+      if (this.audioContext.state !== 'running') {
+        console.warn('AudioContext not running, skipping sound');
+        return;
       }
       
       const oscillator = this.audioContext.createOscillator();
