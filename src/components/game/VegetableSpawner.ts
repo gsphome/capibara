@@ -28,13 +28,13 @@ export class VegetableSpawner {
 
   private spawnVegetable(level: number): Vegetable {
     const type = this.vegetableTypes[Math.floor(Math.random() * this.vegetableTypes.length)];
-    const x = Math.random() * (this.container.clientWidth - GameSettings.VEGETABLE_SIZE);
+    const x = Math.random() * (this.container.clientWidth - GameSettings.getVegetableSize());
     
     const vegetable: Vegetable = {
       id: Date.now().toString() + Math.random(),
       type: type as any,
       x,
-      y: -GameSettings.VEGETABLE_SIZE,
+      y: -GameSettings.getVegetableSize(),
       speed: 2 + (level * 0.3),
       points: this.getVegetablePoints(type)
     };
@@ -53,8 +53,8 @@ export class VegetableSpawner {
     // Create SVG element
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 30 30');
-    svg.setAttribute('width', GameSettings.VEGETABLE_SIZE.toString());
-    svg.setAttribute('height', GameSettings.VEGETABLE_SIZE.toString());
+    svg.setAttribute('width', GameSettings.getVegetableSize().toString());
+    svg.setAttribute('height', GameSettings.getVegetableSize().toString());
     
     const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${vegetable.type}`);

@@ -15,9 +15,9 @@ export const useCollision = () => {
   ): boolean => {
     return (
       vegetable.x < player.x + player.width &&
-      vegetable.x + GameSettings.VEGETABLE_SIZE > player.x &&
+      vegetable.x + GameSettings.getVegetableSize() > player.x &&
       vegetable.y < player.y + player.height &&
-      vegetable.y + GameSettings.VEGETABLE_SIZE > player.y
+      vegetable.y + GameSettings.getVegetableSize() > player.y
     );
   };
 

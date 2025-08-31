@@ -1,5 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 import type { Vegetable } from '../types/game.types';
+import { GameSettings } from '../config/GameSettings';
 
 export interface GameState {
   // Game state
@@ -68,7 +69,7 @@ export const useGameStore = createStore<GameState>()((set) => ({
       return {
         score: state.score + points,
         capybaraFillPercentage: newFillPercentage,
-        gameStatus: newFillPercentage >= 100 ? 'won' : state.gameStatus,
+        gameStatus: newFillPercentage >= GameSettings.LEVEL_UP_THRESHOLD ? 'won' : state.gameStatus,
       };
     }),
 

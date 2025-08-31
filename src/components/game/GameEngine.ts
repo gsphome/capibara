@@ -57,8 +57,9 @@ export class GameEngine {
     } else if (state.gameStatus === 'playing') {
       this.pauseOverlay.hide();
     } else if (state.gameStatus === 'won') {
-      this.levelTransition.show(state.level);
+      this.levelTransition.show(state.level + 1);
       setTimeout(() => {
+        this.gameStore.getState().incrementLevel();
         this.gameStore.getState().resetForNextLevel();
       }, 2000);
     } else if (state.gameStatus === 'lost') {

@@ -1,4 +1,5 @@
 import { gameState } from '../../stores/GameState';
+import { GameSettings } from '../../config/GameSettings';
 
 export class CapybaraPlayer {
   private element!: HTMLElement;
@@ -12,7 +13,7 @@ export class CapybaraPlayer {
 
   constructor(container: HTMLElement) {
     this.gameContainer = container;
-    this.x = this.gameContainer.clientWidth / 2 - 50;
+    this.x = this.gameContainer.clientWidth / 2 - GameSettings.getCapybaraWidth() / 2;
     this.lastX = this.x;
     this.createElement();
     container.appendChild(this.element);
@@ -82,8 +83,7 @@ export class CapybaraPlayer {
       
       const rect = this.gameContainer.getBoundingClientRect();
       const relativeX = e.clientX - rect.left;
-      const isMobile = window.innerWidth <= 768;
-      const capybaraWidth = isMobile ? 50 : 100;
+      const capybaraWidth = GameSettings.getCapybaraWidth();
       const offset = capybaraWidth / 2;
       this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - capybaraWidth, relativeX - offset));
       this.updatePosition();
@@ -115,8 +115,7 @@ export class CapybaraPlayer {
       const touch = e.touches[0];
       const rect = this.gameContainer.getBoundingClientRect();
       const relativeX = touch.clientX - rect.left;
-      const isMobile = window.innerWidth <= 768;
-      const capybaraWidth = isMobile ? 50 : 100;
+      const capybaraWidth = GameSettings.getCapybaraWidth();
       const offset = capybaraWidth / 2;
       this.x = Math.max(0, Math.min(this.gameContainer.clientWidth - capybaraWidth, relativeX - offset));
       this.updatePosition();
@@ -134,8 +133,7 @@ export class CapybaraPlayer {
   }
 
   private moveRight(): void {
-    const isMobile = window.innerWidth <= 768;
-    const capybaraWidth = isMobile ? 50 : 100;
+    const capybaraWidth = GameSettings.getCapybaraWidth();
     this.x = Math.min(this.gameContainer.clientWidth - capybaraWidth, this.x + this.speed);
     this.updatePosition();
   }
@@ -175,17 +173,7 @@ export class CapybaraPlayer {
   }
 
   public getBounds() {
-    const isMobile = window.innerWidth <= 768;
-    const width = isMobile ? 50 : 100;
-    const height = isMobile ? 38 : 75;
-    const bottomOffset = isMobile ? 48 : 95; // Mobile: 10px (bottom) + 38px (height), Desktop: 20px (bottom) + 75px (height)
-    
-    return {
-      x: this.x,
-      y: this.gameContainer.clientHeight - bottomOffset,
-      width,
-      height
-    };
+    return GameSettings.getCapybaraBounds(this.x, this.gameContainer.clientHeight);
   }
 
   public getX(): number {

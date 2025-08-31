@@ -694,8 +694,8 @@ body {
 
 @media (max-width: 768px) {
   .capybara-player {
-    width: 50px;
-    height: 38px;
+    width: 100px;
+    height: 75px;
     bottom: 10px;
   }
 
