@@ -89,13 +89,13 @@ export class CapybaraPlayer {
       this.updatePosition();
     });
 
-    // Touch controls
+    // Touch controls - LIMITED TO GAME CONTAINER ONLY
     let isDragging = false;
     
-    document.addEventListener('touchstart', (e) => {
+    this.gameContainer.addEventListener('touchstart', (e) => {
       // Only handle touches on the game area, not UI elements
       const target = e.target as HTMLElement;
-      if (target.closest('.pause-overlay') || target.closest('.game-over') || target.closest('.level-transition')) {
+      if (target.closest('.pause-overlay') || target.closest('.game-over') || target.closest('.level-transition') || target.closest('.audio-toggle')) {
         return;
       }
       
@@ -103,12 +103,12 @@ export class CapybaraPlayer {
       e.preventDefault();
     }, { passive: false });
 
-    document.addEventListener('touchmove', (e) => {
+    this.gameContainer.addEventListener('touchmove', (e) => {
       if (!isDragging || gameState.gameStatus !== 'playing') return;
       
       // Only handle touches on the game area
       const target = e.target as HTMLElement;
-      if (target.closest('.pause-overlay') || target.closest('.game-over') || target.closest('.level-transition')) {
+      if (target.closest('.pause-overlay') || target.closest('.game-over') || target.closest('.level-transition') || target.closest('.audio-toggle')) {
         return;
       }
       
@@ -122,7 +122,7 @@ export class CapybaraPlayer {
       e.preventDefault();
     }, { passive: false });
 
-    document.addEventListener('touchend', () => {
+    this.gameContainer.addEventListener('touchend', () => {
       isDragging = false;
     });
   }
