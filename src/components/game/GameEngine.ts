@@ -7,6 +7,7 @@ import { GameHUD } from '../ui/GameHUD';
 import { GameOverScreen } from '../ui/GameOverScreen';
 import { LevelTransition } from '../ui/LevelTransition';
 import { PauseOverlay } from '../ui/PauseOverlay';
+import { HelpModal } from '../ui/HelpModal';
 import type { Vegetable } from '../../types/game.types';
 
 export class GameEngine {
@@ -18,6 +19,7 @@ export class GameEngine {
   private gameOverScreen!: GameOverScreen;
   private levelTransition!: LevelTransition;
   private pauseOverlay!: PauseOverlay;
+  private helpModal!: HelpModal;
   private animationId: number = 0;
   private lastTime: number = 0;
   private vegetables: Vegetable[] = [];
@@ -36,7 +38,8 @@ export class GameEngine {
     this.hud = new GameHUD(this.container);
     this.gameOverScreen = new GameOverScreen(this.container, () => this.restart());
     this.levelTransition = new LevelTransition(this.container);
-    this.pauseOverlay = new PauseOverlay(this.container);
+    this.pauseOverlay = new PauseOverlay(this.container, () => this.helpModal.show());
+    this.helpModal = new HelpModal();
 
     // Subscribe to Zustand store changes
     useGameStore.subscribe((state) => this.handleGameStateChange(state));

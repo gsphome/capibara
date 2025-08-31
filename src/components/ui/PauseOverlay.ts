@@ -1,9 +1,11 @@
 export class PauseOverlay {
   private element!: HTMLElement;
   private container: HTMLElement;
+  private onShowHelp?: () => void;
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, onShowHelp?: () => void) {
     this.container = container;
+    this.onShowHelp = onShowHelp;
   }
 
   public show(onResume: () => void): void {
@@ -42,14 +44,15 @@ export class PauseOverlay {
         <div class="pause-overlay__hint">
           <small>💡 Tip: Press SPACE to pause/resume anytime</small>
           <br>
-          <a href="vegetable-preview.html" target="_blank" class="pause-overlay__help-btn">
+          <button class="pause-overlay__help-btn" id="pauseHelpBtn">
             🥕 Vegetable Guide
-          </a>
+          </button>
         </div>
       </div>
     `;
 
     const resumeBtn = this.element.querySelector('.pause-overlay__resume-btn') as HTMLButtonElement;
+    const helpBtn = this.element.querySelector('#pauseHelpBtn') as HTMLButtonElement;
     
     const resume = () => {
       this.hide();
@@ -61,6 +64,10 @@ export class PauseOverlay {
       e.preventDefault();
       resume();
     });
+    
+    if (helpBtn && this.onShowHelp) {
+      helpBtn.addEventListener('click', this.onShowHelp);
+    }
 
     // Resume with spacebar
     const handleKeyPress = (e: KeyboardEvent) => {

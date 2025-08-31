@@ -7,7 +7,7 @@ Un juego web divertido donde ayudas a un capibara hambriento a atrapar vegetales
 ## 🎮 Cómo Jugar
 
 - **Objetivo**: Llena al capibara al 100% atrapando vegetales
-- **Controles**: 
+- **Controles**:
   - 🖱️ **Ratón**: Mueve el cursor para mover al capibara
   - ⌨️ **Teclado**: Flechas o teclas A/D
   - 📱 **Móvil**: Toca y arrastra
@@ -22,6 +22,7 @@ Un juego web divertido donde ayudas a un capibara hambriento a atrapar vegetales
 - **🌶️ Pimiento**: 10 puntos - ¡El más valioso y picante!
 
 ### 🎨 Características Visuales
+
 - **Iconos SVG detallados** - Vegetales realistas y coloridos
 - **Animaciones únicas** - Cada vegetal tiene su propia animación
 - **Efectos de sombra** - Profundidad visual mejorada
@@ -44,6 +45,7 @@ npm run preview
 ```
 
 ### 🎨 Vista Previa de Vegetales
+
 Puedes ver todos los iconos SVG de vegetales en: `vegetable-preview.html`
 
 ## 🛠️ Tecnologías Utilizadas
@@ -78,9 +80,3 @@ Puedes ver todos los iconos SVG de vegetales en: `vegetable-preview.html`
 MIT License - ver [LICENSE](LICENSE) para más detalles.
 
 © 2025 Genil Suarez
-
-## 📄 Licencia
-
-MIT License - ver [LICENSE](LICENSE) para más detalles.
-
-© 2024 Genil Suarez

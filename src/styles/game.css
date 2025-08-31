@@ -413,10 +413,10 @@ body {
   font-size: 0.9rem;
   background: rgba(255,255,255,0.1);
   color: white;
-  text-decoration: none;
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 15px;
   margin-top: 1rem;
+  cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
 }
@@ -424,6 +424,154 @@ body {
 .pause-overlay__help-btn:hover {
   background: rgba(255,255,255,0.2);
   transform: translateY(-1px);
+}
+
+/* Help Modal */
+.help-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.help-modal--show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.help-modal__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.help-modal__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  width: 90vw;
+  max-width: 420px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  backdrop-filter: blur(15px);
+}
+
+.help-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.help-modal__header h2 {
+  color: #FFD700;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.help-modal__close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.help-modal__close:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.help-modal__body {
+  padding: 1rem 1.2rem;
+  color: white;
+}
+
+.vegetable-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.vegetable-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.vegetable-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.1);
+}
+
+.vegetable-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.vegetable-name {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #32CD32;
+  margin-bottom: 0.2rem;
+}
+
+.vegetable-points {
+  font-size: 0.7rem;
+  color: #FFD700;
+}
+
+.help-tips {
+  background: rgba(255,255,255,0.05);
+  border-left: 3px solid #32CD32;
+  padding: 0.8rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.help-tips h3 {
+  color: #32CD32;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.help-tips ul {
+  margin-left: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  .help-modal__content {
+    width: 95vw;
+  }
+  
+  .vegetable-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .help-modal__header,
+  .help-modal__body {
+    padding: 0.8rem;
+  }
 }
 
 .pause-overlay__hint small {

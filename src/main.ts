@@ -1,9 +1,11 @@
 import './styles/game.css';
 import { GameEngine } from './components/game/GameEngine';
+import { HelpModal } from './components/ui/HelpModal';
 
 class CapybaraCatcherGame {
   private gameEngine: GameEngine | null = null;
   private container!: HTMLElement;
+  private helpModal!: HelpModal;
 
   constructor() {
     this.init();
@@ -16,6 +18,9 @@ class CapybaraCatcherGame {
     // Create game container
     this.container = document.createElement('div');
     this.container.className = 'capybara-game';
+    
+    // Initialize help modal
+    this.helpModal = new HelpModal();
     
     // Add instructions
     this.showInstructions();
@@ -218,18 +223,18 @@ class CapybaraCatcherGame {
           <p><strong>Warning:</strong> Don't miss 3 vegetables!</p>
         </div>
         <div style="margin: 1rem 0;">
-          <a href="vegetable-preview.html" target="_blank" style="
+          <button id="helpButton" style="
             display: inline-block;
             padding: 8px 16px;
             font-size: 0.9rem;
             background: rgba(255,255,255,0.1);
             color: white;
-            text-decoration: none;
             border: 1px solid rgba(255,255,255,0.3);
             border-radius: 15px;
+            cursor: pointer;
             transition: all 0.2s ease;
             backdrop-filter: blur(10px);
-          " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🥕 Vegetable Guide</a>
+          " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🥕 Vegetable Guide</button>
         </div>
       <button id="startGame" style="
         padding: 12px 24px;
@@ -254,6 +259,7 @@ class CapybaraCatcherGame {
     this.container.appendChild(instructions);
     
     const startButton = instructions.querySelector('#startGame') as HTMLButtonElement;
+    const helpButton = instructions.querySelector('#helpButton') as HTMLButtonElement;
     
     // Enhanced mobile interaction
     const startGame = () => {
@@ -265,6 +271,11 @@ class CapybaraCatcherGame {
     startButton.addEventListener('touchend', (e) => {
       e.preventDefault();
       startGame();
+    });
+    
+    // Help button interaction
+    helpButton.addEventListener('click', () => {
+      this.helpModal.show();
     });
     
     // Prevent background interaction
