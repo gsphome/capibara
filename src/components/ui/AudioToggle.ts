@@ -15,18 +15,19 @@ export class AudioToggle {
     this.element.innerHTML = '🔊';
     this.element.style.cssText = `
       position: fixed;
-      top: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.6);
+      top: max(10px, env(safe-area-inset-top) + 5px);
+      right: max(10px, env(safe-area-inset-right) + 5px);
+      background: rgba(0,0,0,0.8);
       border: 1px solid rgba(255,255,255,0.3);
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       font-size: 1.2rem;
       cursor: pointer;
       z-index: 1000;
       transition: all 0.2s ease;
       backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     `;
     
     this.element.addEventListener('click', async () => {

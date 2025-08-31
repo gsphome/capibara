@@ -68,4 +68,14 @@ export class GameSettings {
       height
     };
   }
+  
+  // Calculate visual fill percentage based on current points and threshold
+  public static calculateFillPercentage(currentPoints: number): number {
+    return Math.min(100, (currentPoints / this.LEVEL_UP_THRESHOLD) * 100);
+  }
+  
+  // Calculate actual points needed for level up
+  public static getPointsForLevelUp(): number {
+    return this.LEVEL_UP_THRESHOLD;
+  }
 }

@@ -629,15 +629,21 @@ body {
 
 /* Mobile Optimizations */
 @media (max-width: 1024px) {
+  body {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    min-height: 100dvh;
+  }
+  
   .game-wrapper {
     flex-direction: column;
     gap: 5px;
     padding: 5px;
+    margin-top: max(20px, env(safe-area-inset-top));
   }
   
   .game-sidebar {
     position: fixed;
-    top: 5px;
+    top: max(5px, env(safe-area-inset-top));
     left: 50%;
     transform: translateX(-50%);
     flex-direction: column;
@@ -645,9 +651,9 @@ body {
     align-items: center;
     min-width: auto;
     width: auto;
-    background: rgba(0,0,0,0.8);
-    padding: 6px 10px 4px;
-    border-radius: 0 0 15px 15px;
+    background: rgba(0,0,0,0.9);
+    padding: 8px 12px 6px;
+    border-radius: 0 0 20px 20px;
     backdrop-filter: blur(25px);
     border: 1px solid rgba(255,255,255,0.2);
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
@@ -686,9 +692,9 @@ body {
   .capybara-game {
     width: 95vw;
     max-width: 500px;
-    height: 75vh;
+    height: calc(100dvh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     max-height: 450px;
-    margin-top: 60px;
+    margin-top: max(80px, calc(60px + env(safe-area-inset-top)));
   }
 }
 
@@ -697,6 +703,11 @@ body {
     width: 100px;
     height: 75px;
     bottom: 10px;
+  }
+  
+  .game-wrapper {
+    margin-top: max(25px, env(safe-area-inset-top) + 5px);
+    padding: 8px;
   }
 
   .vegetable {
@@ -743,8 +754,9 @@ body {
   }
 
   .capybara-game {
-    height: 65vh;
+    height: calc(100dvh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     max-height: 350px;
+    min-height: 280px;
   }
 
   .game-over__title {

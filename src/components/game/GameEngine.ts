@@ -1,5 +1,6 @@
 import { useGameStore } from '../../stores/useGameStore';
 import type { GameState } from '../../stores/useGameStore';
+import { GameSettings } from '../../config/GameSettings';
 import { CapybaraPlayer } from './CapybaraPlayer';
 import { VegetableSpawner } from './VegetableSpawner';
 import { ParticleSystem } from '../effects/ParticleSystem';
@@ -172,8 +173,11 @@ export class GameEngine {
     this.hud.updateScore(currentState.score);
     this.hud.updateLevel(currentState.level);
     this.hud.updateLives(3 - currentState.missedVegetables);
-    this.hud.updateProgress(currentState.capybaraFillPercentage);
-    this.player.updateFill(currentState.capybaraFillPercentage);
+    
+    // Calculate visual fill percentage
+    const visualFillPercentage = GameSettings.calculateFillPercentage(currentState.capybaraFillPercentage);
+    this.hud.updateProgress(visualFillPercentage);
+    this.player.updateFill(visualFillPercentage);
   }
 
   private render(): void {

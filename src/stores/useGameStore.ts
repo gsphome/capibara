@@ -65,11 +65,14 @@ export const useGameStore = createStore<GameState>()((set) => ({
 
   updateScore: (points: number) =>
     set((state) => {
-      const newFillPercentage = Math.min(100, state.capybaraFillPercentage + points);
+      const newScore = state.score + points;
+      const newFillPoints = state.capybaraFillPercentage + points;
+      const shouldLevelUp = newFillPoints >= GameSettings.LEVEL_UP_THRESHOLD;
+      
       return {
-        score: state.score + points,
-        capybaraFillPercentage: newFillPercentage,
-        gameStatus: newFillPercentage >= GameSettings.LEVEL_UP_THRESHOLD ? 'won' : state.gameStatus,
+        score: newScore,
+        capybaraFillPercentage: shouldLevelUp ? GameSettings.LEVEL_UP_THRESHOLD : newFillPoints,
+        gameStatus: shouldLevelUp ? 'won' : state.gameStatus,
       };
     }),
 
