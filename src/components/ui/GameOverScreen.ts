@@ -36,7 +36,7 @@ export class GameOverScreen {
     if (won) {
       title.textContent = '🎉 You Win! 🎉';
       title.style.color = '#FFD700';
-      scoreDisplay.textContent = `Capybara is full! Final Score: ${score} (Level ${level})`;
+      scoreDisplay.textContent = `Capybara has full energy! Final Score: ${score} (Level ${level})`;
     } else {
       title.textContent = '💔 Game Over 💔';
       title.style.color = '#FF4444';

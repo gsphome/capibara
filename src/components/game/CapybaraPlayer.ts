@@ -164,7 +164,7 @@ export class CapybaraPlayer {
   public updateFill(percentage: number): void {
     this.fillElement.style.height = `${percentage}%`;
     
-    // Change color as capybara gets fuller
+    // Change color as capybara gets more energy
     if (percentage >= 80) {
       this.fillElement.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
     } else if (percentage >= 50) {
