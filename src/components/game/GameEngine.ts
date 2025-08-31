@@ -52,7 +52,7 @@ export class GameEngine {
     } else if (gameState.gameStatus === 'playing') {
       this.pauseOverlay.hide();
     } else if (gameState.gameStatus === 'won') {
-      this.levelTransition.show(gameState.level + 1);
+      this.levelTransition.show(gameState.level);
       setTimeout(() => {
         gameState.resetForNextLevel();
         gameState.gameStatus = 'playing';
@@ -148,11 +148,8 @@ export class GameEngine {
     this.hud.updateProgress(gameState.capybaraFillPercentage);
     this.player.updateFill(gameState.capybaraFillPercentage);
 
-    // Check for level progression
-    const currentLevelThreshold = gameState.level * 100;
-    if (gameState.score >= currentLevelThreshold && gameState.capybaraFillPercentage < 100) {
-      gameState.incrementLevel();
-    }
+    // Level progression is handled by capybara fill reaching 100%
+    // No need to check score thresholds here
   }
 
   private render(): void {

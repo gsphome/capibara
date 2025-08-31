@@ -29,51 +29,97 @@ class CapybaraCatcherGame {
       <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <!-- Capybara Sprites -->
         <symbol id="capybara-right" viewBox="0 0 80 60">
-          <ellipse cx="40" cy="35" rx="25" ry="18" fill="#D2691E" stroke="#8B4513" stroke-width="2"/>
-          <ellipse cx="40" cy="35" rx="20" ry="14" fill="#DEB887"/>
-          <ellipse class="body-fill" cx="40" cy="35" rx="18" ry="12" fill="#32CD32" opacity="0" style="transition: opacity 0.3s ease;"/>
-          <ellipse cx="60" cy="25" rx="15" ry="12" fill="#D2691E" stroke="#8B4513" stroke-width="2"/>
-          <ellipse cx="60" cy="25" rx="12" ry="9" fill="#DEB887"/>
-          <ellipse cx="55" cy="18" rx="4" ry="6" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
-          <ellipse cx="65" cy="18" rx="4" ry="6" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
-          <ellipse cx="55" cy="18" rx="2" ry="4" fill="#CD853F"/>
-          <ellipse cx="65" cy="18" rx="2" ry="4" fill="#CD853F"/>
-          <circle cx="57" cy="22" r="3" fill="#000"/>
-          <circle cx="67" cy="22" r="3" fill="#000"/>
-          <circle cx="58" cy="21" r="1" fill="#FFF"/>
-          <circle cx="68" cy="21" r="1" fill="#FFF"/>
-          <ellipse cx="72" cy="27" rx="2" ry="1.5" fill="#8B4513"/>
+          <!-- Body -->
+          <ellipse cx="40" cy="35" rx="25" ry="18" fill="#CD853F" stroke="#8B4513" stroke-width="1.5"/>
+          <ellipse cx="40" cy="35" rx="22" ry="15" fill="#DEB887"/>
+          <ellipse class="body-fill" cx="40" cy="35" rx="20" ry="13" fill="#32CD32" opacity="0" style="transition: opacity 0.3s ease;"/>
+          
+          <!-- Head -->
+          <ellipse cx="62" cy="25" rx="16" ry="14" fill="#CD853F" stroke="#8B4513" stroke-width="1.5"/>
+          <ellipse cx="62" cy="25" rx="14" ry="12" fill="#DEB887"/>
+          
+          <!-- Snout -->
+          <ellipse cx="75" cy="28" rx="6" ry="4" fill="#DEB887" stroke="#8B4513" stroke-width="1"/>
+          <ellipse cx="75" cy="28" rx="4" ry="2.5" fill="#F5DEB3"/>
+          
+          <!-- Nostrils -->
+          <ellipse cx="78" cy="27" rx="1" ry="0.8" fill="#8B4513"/>
+          <ellipse cx="78" cy="29" rx="1" ry="0.8" fill="#8B4513"/>
+          
+          <!-- Ears -->
+          <ellipse cx="55" cy="16" rx="3" ry="5" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+          <ellipse cx="69" cy="16" rx="3" ry="5" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+          <ellipse cx="55" cy="17" rx="1.5" ry="3" fill="#F5DEB3"/>
+          <ellipse cx="69" cy="17" rx="1.5" ry="3" fill="#F5DEB3"/>
+          
+          <!-- Eyes (larger and cuter) -->
+          <circle cx="58" cy="22" r="4" fill="#000"/>
+          <circle cx="70" cy="22" r="4" fill="#000"/>
+          <circle cx="59" cy="20.5" r="1.5" fill="#FFF"/>
+          <circle cx="71" cy="20.5" r="1.5" fill="#FFF"/>
+          <circle cx="59.5" cy="21" r="0.5" fill="#FFF"/>
+          <circle cx="71.5" cy="21" r="0.5" fill="#FFF"/>
+          
+          <!-- Mouth (subtle smile) -->
+          <path d="M72 31 Q75 33 78 31" stroke="#8B4513" stroke-width="1" fill="none"/>
+          
+          <!-- Legs -->
           <g class="legs-right">
-            <ellipse cx="30" cy="48" rx="3" ry="8" fill="#D2691E"/>
-            <ellipse cx="40" cy="50" rx="3" ry="6" fill="#D2691E"/>
-            <ellipse cx="50" cy="48" rx="3" ry="8" fill="#D2691E"/>
-            <ellipse cx="60" cy="50" rx="3" ry="6" fill="#D2691E"/>
+            <ellipse cx="30" cy="48" rx="4" ry="8" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+            <ellipse cx="42" cy="50" rx="4" ry="6" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+            <ellipse cx="54" cy="48" rx="4" ry="8" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+            <ellipse cx="66" cy="50" rx="4" ry="6" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
           </g>
-          <circle cx="18" cy="30" r="4" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
+          
+          <!-- Tail -->
+          <circle cx="18" cy="32" r="3" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
         </symbol>
         
         <symbol id="capybara-left" viewBox="0 0 80 60">
-          <ellipse cx="40" cy="35" rx="25" ry="18" fill="#D2691E" stroke="#8B4513" stroke-width="2"/>
-          <ellipse cx="40" cy="35" rx="20" ry="14" fill="#DEB887"/>
-          <ellipse class="body-fill" cx="40" cy="35" rx="18" ry="12" fill="#32CD32" opacity="0" style="transition: opacity 0.3s ease;"/>
-          <ellipse cx="20" cy="25" rx="15" ry="12" fill="#D2691E" stroke="#8B4513" stroke-width="2"/>
-          <ellipse cx="20" cy="25" rx="12" ry="9" fill="#DEB887"/>
-          <ellipse cx="15" cy="18" rx="4" ry="6" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
-          <ellipse cx="25" cy="18" rx="4" ry="6" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
-          <ellipse cx="15" cy="18" rx="2" ry="4" fill="#CD853F"/>
-          <ellipse cx="25" cy="18" rx="2" ry="4" fill="#CD853F"/>
-          <circle cx="13" cy="22" r="3" fill="#000"/>
-          <circle cx="23" cy="22" r="3" fill="#000"/>
-          <circle cx="12" cy="21" r="1" fill="#FFF"/>
-          <circle cx="22" cy="21" r="1" fill="#FFF"/>
-          <ellipse cx="8" cy="27" rx="2" ry="1.5" fill="#8B4513"/>
+          <!-- Body -->
+          <ellipse cx="40" cy="35" rx="25" ry="18" fill="#CD853F" stroke="#8B4513" stroke-width="1.5"/>
+          <ellipse cx="40" cy="35" rx="22" ry="15" fill="#DEB887"/>
+          <ellipse class="body-fill" cx="40" cy="35" rx="20" ry="13" fill="#32CD32" opacity="0" style="transition: opacity 0.3s ease;"/>
+          
+          <!-- Head -->
+          <ellipse cx="18" cy="25" rx="16" ry="14" fill="#CD853F" stroke="#8B4513" stroke-width="1.5"/>
+          <ellipse cx="18" cy="25" rx="14" ry="12" fill="#DEB887"/>
+          
+          <!-- Snout -->
+          <ellipse cx="5" cy="28" rx="6" ry="4" fill="#DEB887" stroke="#8B4513" stroke-width="1"/>
+          <ellipse cx="5" cy="28" rx="4" ry="2.5" fill="#F5DEB3"/>
+          
+          <!-- Nostrils -->
+          <ellipse cx="2" cy="27" rx="1" ry="0.8" fill="#8B4513"/>
+          <ellipse cx="2" cy="29" rx="1" ry="0.8" fill="#8B4513"/>
+          
+          <!-- Ears -->
+          <ellipse cx="11" cy="16" rx="3" ry="5" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+          <ellipse cx="25" cy="16" rx="3" ry="5" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+          <ellipse cx="11" cy="17" rx="1.5" ry="3" fill="#F5DEB3"/>
+          <ellipse cx="25" cy="17" rx="1.5" ry="3" fill="#F5DEB3"/>
+          
+          <!-- Eyes (larger and cuter) -->
+          <circle cx="10" cy="22" r="4" fill="#000"/>
+          <circle cx="22" cy="22" r="4" fill="#000"/>
+          <circle cx="9" cy="20.5" r="1.5" fill="#FFF"/>
+          <circle cx="21" cy="20.5" r="1.5" fill="#FFF"/>
+          <circle cx="8.5" cy="21" r="0.5" fill="#FFF"/>
+          <circle cx="20.5" cy="21" r="0.5" fill="#FFF"/>
+          
+          <!-- Mouth (subtle smile) -->
+          <path d="M2 31 Q5 33 8 31" stroke="#8B4513" stroke-width="1" fill="none"/>
+          
+          <!-- Legs -->
           <g class="legs-left">
-            <ellipse cx="20" cy="50" rx="3" ry="6" fill="#D2691E"/>
-            <ellipse cx="30" cy="48" rx="3" ry="8" fill="#D2691E"/>
-            <ellipse cx="40" cy="50" rx="3" ry="6" fill="#D2691E"/>
-            <ellipse cx="50" cy="48" rx="3" ry="8" fill="#D2691E"/>
+            <ellipse cx="14" cy="50" rx="4" ry="6" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+            <ellipse cx="26" cy="48" rx="4" ry="8" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+            <ellipse cx="38" cy="50" rx="4" ry="6" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
+            <ellipse cx="50" cy="48" rx="4" ry="8" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
           </g>
-          <circle cx="62" cy="30" r="4" fill="#D2691E" stroke="#8B4513" stroke-width="1"/>
+          
+          <!-- Tail -->
+          <circle cx="62" cy="32" r="3" fill="#CD853F" stroke="#8B4513" stroke-width="1"/>
         </symbol>
         
         <!-- Vegetable Sprites -->

@@ -26,7 +26,7 @@ export class LevelTransition {
     this.element.innerHTML = `
       <div class="level-transition__content">
         <h1>Level ${level}</h1>
-        <p>Get ready!</p>
+        <p>Let's go!</p>
       </div>
     `;
   }

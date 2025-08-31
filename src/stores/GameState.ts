@@ -55,6 +55,7 @@ export class GameState {
     
     if (this.capybaraFillPercentage >= 100) {
       this.gameStatus = 'won';
+      this.incrementLevel();
     }
     
     this.notify();
