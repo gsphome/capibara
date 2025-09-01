@@ -79,7 +79,7 @@ export class PauseOverlay {
     if (audioBtn) {
       audioBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        this.toggleAudio(audioBtn);
+        this.toggleAudio();
       });
     }
     
@@ -130,7 +130,7 @@ export class PauseOverlay {
     }
   }
   
-  private async toggleAudio(audioBtn: HTMLButtonElement): Promise<void> {
+  private async toggleAudio(): Promise<void> {
     const { AudioManager } = await import('../../audio/AudioManager');
     const audioManager = AudioManager.getInstance();
     const newState = audioManager.toggle();
