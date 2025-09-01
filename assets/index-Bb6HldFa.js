@@ -119,7 +119,7 @@ var F=Object.defineProperty,P=Object.defineProperties;var k=Object.getOwnPropert
       backdrop-filter: blur(25px);
       border: 1px solid rgba(255,255,255,0.2);
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      z-index: 1000;
+      z-index: 2000;
       max-width: 95vw;
       overflow: hidden;
     `,this.pauseBtn=document.createElement("button"),this.pauseBtn.innerHTML="⏸️",this.pauseBtn.style.cssText=`
@@ -397,4 +397,4 @@ var F=Object.defineProperty,P=Object.defineProperties;var k=Object.getOwnPropert
         </button>
       </div>
     `,this.container.appendChild(e);const t=e.querySelector("#startGame"),s=()=>{e.remove(),this.startGame()},i=l=>m(this,null,function*(){l&&l.preventDefault();try{const o=(yield B(()=>m(this,null,function*(){const{AudioManager:c}=yield Promise.resolve().then(()=>A);return{AudioManager:c}}),void 0)).AudioManager.getInstance();yield o.init(),yield new Promise(c=>setTimeout(c,100)),yield o.play("click"),console.log("Audio initialized successfully for iOS")}catch(o){console.warn("Audio initialization failed:",o)}s()});t.removeAttribute("style"),t.addEventListener("click",i),t.addEventListener("touchend",i);const n=e.querySelector("#helpButton");n&&n.addEventListener("click",()=>{this.helpModal.show()}),t.addEventListener("click",()=>{}),n.addEventListener("click",()=>{}),e.addEventListener("touchmove",l=>{l.preventDefault()}),e.addEventListener("click",l=>{l.stopPropagation()})}startGame(){this.gameEngine&&this.gameEngine.destroy(),this.gameEngine=new j(this.container)}}document.addEventListener("DOMContentLoaded",()=>{new Z});window.addEventListener("resize",()=>{const r=document.querySelector(".particle-canvas"),e=document.querySelector(".capybara-game");r&&e&&(r.width=e.clientWidth,r.height=e.clientHeight)});
-//# sourceMappingURL=index-BVR3G8MR.js.map
+//# sourceMappingURL=index-Bb6HldFa.js.map
