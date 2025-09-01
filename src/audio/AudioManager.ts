@@ -16,11 +16,27 @@ export class AudioManager {
   }
   
   private setupMobileAudioInit(): void {
+    // Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
     // Auto-initialize audio on first user interaction (Safari mobile fix)
     const initAudio = async () => {
       if (!this.initialized) {
+        console.log('Initializing audio for mobile, iOS detected:', isIOS);
         await this.init();
         this.initialized = true;
+        
+        // For iOS, try additional unlock attempts
+        if (isIOS) {
+          setTimeout(async () => {
+            try {
+              await this.playUnlockSound();
+            } catch (e) {
+              console.warn('Additional iOS unlock failed:', e);
+            }
+          }, 200);
+        }
+        
         // Remove listeners after first init
         document.removeEventListener('touchstart', initAudio);
         document.removeEventListener('click', initAudio);
@@ -102,14 +118,46 @@ export class AudioManager {
       // Initialize context on first user interaction
       if (!this.audioContext) {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        
-        // Ensure context is running
-        if (this.audioContext.state === 'suspended') {
-          await this.audioContext.resume();
-        }
+      }
+      
+      // iOS Safari specific: Resume context and play silent sound
+      if (this.audioContext.state === 'suspended') {
+        await this.audioContext.resume();
+      }
+      
+      // iOS Safari fix: Play a silent sound to unlock audio
+      if (!this.initialized) {
+        await this.playUnlockSound();
       }
     } catch (error) {
       console.warn('Audio initialization failed:', error);
+    }
+  }
+  
+  private async playUnlockSound(): Promise<void> {
+    try {
+      if (!this.audioContext || this.audioContext.state !== 'running') return;
+      
+      // Create a very short, silent sound to unlock iOS audio
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      
+      oscillator.frequency.value = 440;
+      oscillator.type = 'sine';
+      
+      // Make it silent but audible to iOS
+      gainNode.gain.setValueAtTime(0.001, this.audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.01);
+      
+      oscillator.start();
+      oscillator.stop(this.audioContext.currentTime + 0.01);
+      
+      console.log('iOS audio unlock sound played');
+    } catch (error) {
+      console.warn('iOS audio unlock failed:', error);
     }
   }
 }

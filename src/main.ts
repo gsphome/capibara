@@ -7,7 +7,8 @@ class CapybaraCatcherGame {
   private gameEngine: GameEngine | null = null;
   private container!: HTMLElement;
   private helpModal!: HelpModal;
-  private audioToggle!: AudioToggle;
+  // @ts-ignore - Keep reference to prevent garbage collection
+  private _audioToggle!: AudioToggle;
 
   constructor() {
     this.init();
@@ -23,7 +24,7 @@ class CapybaraCatcherGame {
     
     // Initialize help modal and audio toggle
     this.helpModal = new HelpModal();
-    this.audioToggle = new AudioToggle(document.body);
+    this._audioToggle = new AudioToggle(document.body);
     
     // Add instructions
     this.showInstructions();
@@ -273,11 +274,19 @@ class CapybaraCatcherGame {
     const initAudioAndStart = async (e?: Event) => {
       if (e) e.preventDefault();
       try {
-        // Initialize audio on first user interaction (Safari mobile fix)
+        // Initialize audio on first user interaction (iOS Safari fix)
         const audioManager = (await import('./audio/AudioManager')).AudioManager.getInstance();
+        
+        // Multiple initialization attempts for iOS
         await audioManager.init();
-        // Play a test sound to unlock audio
+        
+        // Wait a bit for iOS to process
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Try to play a test sound
         await audioManager.play('click');
+        
+        console.log('Audio initialized successfully for iOS');
       } catch (error) {
         console.warn('Audio initialization failed:', error);
       }
