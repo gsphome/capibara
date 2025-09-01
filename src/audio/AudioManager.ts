@@ -3,9 +3,104 @@ export class AudioManager {
   private enabled: boolean = true;
   private audioContext: AudioContext | null = null;
   private initialized: boolean = false;
+  private useHTML5Audio: boolean = false;
+  private audioElements: Map<string, HTMLAudioElement> = new Map();
   
   private constructor() {
+    this.detectAudioSupport();
     this.setupMobileAudioInit();
+  }
+  
+  private detectAudioSupport(): void {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    
+    // Use HTML5 Audio for iOS Safari
+    this.useHTML5Audio = isIOS && isSafari;
+    console.log('Audio method:', this.useHTML5Audio ? 'HTML5 Audio' : 'Web Audio API');
+    
+    if (this.useHTML5Audio) {
+      this.createHTML5Sounds();
+    }
+  }
+  
+  private createHTML5Sounds(): void {
+    const sounds = ['catch', 'miss', 'levelup', 'gameover', 'click'];
+    
+    sounds.forEach(soundName => {
+      const audio = new Audio();
+      audio.preload = 'auto';
+      
+      // Create data URL for simple beep sounds
+      const freq = this.getSoundFrequency(soundName);
+      const duration = this.getSoundDuration(soundName);
+      
+      // Simple beep using data URL (works better on iOS)
+      audio.src = this.createBeepDataURL(freq, duration);
+      audio.volume = 0.3;
+      
+      this.audioElements.set(soundName, audio);
+    });
+  }
+  
+  private getSoundFrequency(name: string): number {
+    const freqs = {
+      catch: 800,
+      miss: 200,
+      levelup: 1000,
+      gameover: 150,
+      click: 600
+    };
+    return freqs[name as keyof typeof freqs] || 440;
+  }
+  
+  private getSoundDuration(name: string): number {
+    const durations = {
+      catch: 0.1,
+      miss: 0.2,
+      levelup: 0.3,
+      gameover: 0.5,
+      click: 0.05
+    };
+    return durations[name as keyof typeof durations] || 0.1;
+  }
+  
+  private createBeepDataURL(frequency: number, duration: number): string {
+    // Create a simple sine wave data URL
+    const sampleRate = 8000;
+    const samples = Math.floor(sampleRate * duration);
+    const buffer = new ArrayBuffer(44 + samples * 2);
+    const view = new DataView(buffer);
+    
+    // WAV header
+    const writeString = (offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+    
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + samples * 2, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, samples * 2, true);
+    
+    // Generate sine wave
+    for (let i = 0; i < samples; i++) {
+      const sample = Math.sin(2 * Math.PI * frequency * i / sampleRate) * 0.3 * 32767;
+      view.setInt16(44 + i * 2, sample, true);
+    }
+    
+    const blob = new Blob([buffer], { type: 'audio/wav' });
+    return URL.createObjectURL(blob);
   }
   
   public static getInstance(): AudioManager {
@@ -51,23 +146,34 @@ export class AudioManager {
     if (!this.enabled) return;
     
     try {
-      // Initialize if not done yet
+      // Use HTML5 Audio for iOS Safari
+      if (this.useHTML5Audio) {
+        const audio = this.audioElements.get(name);
+        if (audio) {
+          audio.currentTime = 0;
+          const playPromise = audio.play();
+          if (playPromise) {
+            await playPromise;
+          }
+          console.log('HTML5 Audio played:', name);
+        }
+        return;
+      }
+      
+      // Web Audio API fallback
       if (!this.initialized) {
         await this.init();
         this.initialized = true;
       }
       
-      // Reuse existing context or create new one
       if (!this.audioContext || this.audioContext.state === 'closed') {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
       
-      // Resume context if suspended (Safari mobile requirement)
       if (this.audioContext.state === 'suspended') {
         await this.audioContext.resume();
       }
       
-      // Double-check context is running
       if (this.audioContext.state !== 'running') {
         console.warn('AudioContext not running, skipping sound');
         return;
