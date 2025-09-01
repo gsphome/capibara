@@ -197,7 +197,7 @@ body {
   align-self: flex-start;
 }
 
-/* Desktop HUD positioning */
+/* Desktop HUD positioning - Premium Horizontal Style */
 @media (min-width: 1025px) {
   .game-wrapper {
     flex-direction: column;
@@ -205,16 +205,10 @@ body {
     gap: 15px;
   }
   
-  /* Hide original buttons on desktop - they're now in HUD */
+  /* Hide original buttons on desktop */
   .pause-button,
   .audio-toggle {
     display: none;
-  }
-  
-  /* Desktop audio button mute indicator */
-  .hud-control-btn .mute-indicator {
-    width: 3px;
-    height: 32px;
   }
   
   .game-sidebar {
@@ -284,6 +278,11 @@ body {
   .progress-bar::before {
     font-size: 12px;
     left: 10px;
+  }
+  
+  .hud-control-btn .mute-indicator {
+    width: 3px;
+    height: 32px;
   }
 }
 
@@ -969,29 +968,29 @@ body {
     padding-top: 50px;
   }
   
-  /* Reposition control buttons for mobile UI bar */
-  .pause-button {
-    position: static !important;
-    background: rgba(255,255,255,0.1) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 0.9rem !important;
-    margin: 0 !important;
-    backdrop-filter: none !important;
-    box-shadow: none !important;
+  /* Mobile uses MobileUIBar, desktop GameHUD is handled separately */
+  
+  /* Mobile UI - Minimal Style */
+  .mobile-ui-bar {
+    display: flex !important;
+    position: fixed !important;
+    top: 5px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: rgba(0,0,0,0.7) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+    padding: 4px 10px !important;
+    border-radius: 16px !important;
+    z-index: 2000 !important;
+    max-width: 95vw !important;
   }
   
+  /* Hide duplicate buttons on mobile - MobileUIBar handles all controls */
+  .pause-button,
   .audio-toggle {
-    position: static !important;
-    background: rgba(255,255,255,0.1) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 0.9rem !important;
-    margin: 0 !important;
-    backdrop-filter: none !important;
-    box-shadow: none !important;
+    display: none !important;
   }
   
   .game-wrapper {
@@ -1001,27 +1000,12 @@ body {
     margin-top: 0;
   }
   
+  /* Hide GameHUD on mobile - MobileUIBar replaces it */
   .game-sidebar {
-    position: fixed;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    min-width: auto;
-    width: auto;
-    max-width: 95vw;
-    background: rgba(0,0,0,0.9);
-    padding: 6px 12px;
-    border-radius: 20px;
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    z-index: 30;
+    display: none !important;
   }
+  
+
   
   .game-hud {
     display: flex;

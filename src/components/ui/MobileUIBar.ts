@@ -40,7 +40,7 @@ export class MobileUIBar {
       backdrop-filter: blur(25px);
       border: 1px solid rgba(255,255,255,0.2);
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      z-index: 1000;
+      z-index: 2000;
       max-width: 95vw;
       overflow: hidden;
     `;
