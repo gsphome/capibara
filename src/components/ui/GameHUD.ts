@@ -61,17 +61,32 @@ export class GameHUD {
     const hudRow = document.createElement('div');
     hudRow.className = 'game-hud__row';
     
-    // Add pause button to HUD on mobile
-    const pauseBtn = document.querySelector('.pause-button');
-    if (pauseBtn && window.innerWidth <= 1024) {
-      hudRow.appendChild(pauseBtn);
+    const isMobile = window.innerWidth <= 1024;
+    
+    // Add pause button to HUD
+    if (isMobile) {
+      const pauseBtn = document.querySelector('.pause-button');
+      if (pauseBtn) {
+        hudRow.appendChild(pauseBtn);
+      }
+    } else {
+      // Create pause button for desktop HUD
+      const desktopPauseBtn = document.createElement('button');
+      desktopPauseBtn.className = 'hud-control-btn pause-btn';
+      desktopPauseBtn.innerHTML = '⏸️';
+      desktopPauseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Trigger pause via keyboard event
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      });
+      hudRow.appendChild(desktopPauseBtn);
     }
     
     hudRow.appendChild(this.scoreElement);
     hudRow.appendChild(this.levelElement);
     hudRow.appendChild(this.missedElement);
     
-    // Progress bar in the same row for mobile
+    // Progress bar
     const progressContainer = document.createElement('div');
     progressContainer.className = 'progress-bar';
     
@@ -82,10 +97,32 @@ export class GameHUD {
     progressContainer.appendChild(this.progressFill);
     hudRow.appendChild(progressContainer);
     
-    // Add audio button to HUD on mobile
-    const audioBtn = document.querySelector('.audio-toggle');
-    if (audioBtn && window.innerWidth <= 1024) {
-      hudRow.appendChild(audioBtn);
+    // Add audio button to HUD
+    if (isMobile) {
+      const audioBtn = document.querySelector('.audio-toggle');
+      if (audioBtn) {
+        hudRow.appendChild(audioBtn);
+      }
+    } else {
+      // Create audio button for desktop HUD
+      const desktopAudioBtn = document.createElement('button');
+      desktopAudioBtn.className = 'hud-control-btn audio-btn';
+      desktopAudioBtn.innerHTML = `
+        <span class="audio-icon">🔊</span>
+        <span class="mute-indicator"></span>
+      `;
+      desktopAudioBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Toggle audio via existing AudioToggle functionality
+        const audioToggle = document.querySelector('.audio-toggle') as HTMLElement;
+        if (audioToggle) {
+          audioToggle.click();
+          // Update visual state
+          const isEnabled = audioToggle.innerHTML === '🔊';
+          desktopAudioBtn.classList.toggle('muted', !isEnabled);
+        }
+      });
+      hudRow.appendChild(desktopAudioBtn);
     }
     
     this.element.appendChild(hudRow);

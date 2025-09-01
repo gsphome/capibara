@@ -135,8 +135,23 @@ export class MobileUIBar {
 
     // Audio button
     this.audioBtn = document.createElement('button');
-    this.audioBtn.innerHTML = '🔊';
-    this.audioBtn.style.cssText = this.pauseBtn.style.cssText;
+    this.audioBtn.innerHTML = `
+      <span class="audio-icon">🔊</span>
+      <span class="mute-indicator" style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 2px;
+        height: 20px;
+        background: #ff0000;
+        transform: translate(-50%, -50%) rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        border-radius: 1px;
+        box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);
+      "></span>
+    `;
+    this.audioBtn.style.cssText = this.pauseBtn.style.cssText + 'position: relative; overflow: visible;';
 
     // Add all elements
     this.element.appendChild(this.pauseBtn);
@@ -167,8 +182,14 @@ export class MobileUIBar {
 
   private toggleAudio(): void {
     this.audioEnabled = !this.audioEnabled;
-    this.audioBtn.innerHTML = this.audioEnabled ? '🔊' : '🔇';
-    this.audioBtn.style.opacity = this.audioEnabled ? '1' : '0.6';
+    const muteIndicator = this.audioBtn.querySelector('.mute-indicator') as HTMLElement;
+    const audioIcon = this.audioBtn.querySelector('.audio-icon') as HTMLElement;
+    
+    if (muteIndicator && audioIcon) {
+      muteIndicator.style.opacity = this.audioEnabled ? '0' : '1';
+      audioIcon.style.opacity = this.audioEnabled ? '1' : '0.6';
+    }
+    
     this.onAudioToggle();
   }
 

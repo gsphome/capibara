@@ -197,6 +197,96 @@ body {
   align-self: flex-start;
 }
 
+/* Desktop HUD positioning */
+@media (min-width: 1025px) {
+  .game-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  /* Hide original buttons on desktop - they're now in HUD */
+  .pause-button,
+  .audio-toggle {
+    display: none;
+  }
+  
+  /* Desktop audio button mute indicator */
+  .hud-control-btn .mute-indicator {
+    width: 3px;
+    height: 32px;
+  }
+  
+  .game-sidebar {
+    width: 100%;
+    max-width: 650px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, 
+      rgba(255,255,255,0.1) 0%, 
+      rgba(255,255,255,0.05) 50%, 
+      rgba(0,0,0,0.1) 100%);
+    padding: 16px 24px;
+    border-radius: 20px;
+    backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 
+      0 8px 32px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.2),
+      0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .game-sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255,255,255,0.1), 
+      transparent);
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  .game-hud {
+    flex-direction: row;
+    gap: 24px;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .game-hud__row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+  
+  .progress-bar {
+    flex: 1;
+    max-width: 220px;
+    height: 18px;
+    margin: 0 24px;
+  }
+  
+  .progress-bar::before {
+    font-size: 12px;
+    left: 10px;
+  }
+}
+
 /* UI Elements */
 .game-hud {
   display: flex;
@@ -210,29 +300,164 @@ body {
 
 .game-hud__score,
 .game-hud__level,
-.game-hud__lives,
-.progress-bar {
-  background: rgba(0,0,0,0.4);
-  padding: 8px 16px;
-  border-radius: 16px;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.game-hud__lives {
+  background: linear-gradient(145deg, 
+    rgba(255,255,255,0.15) 0%, 
+    rgba(255,255,255,0.05) 100%);
+  padding: 10px 18px;
+  border-radius: 14px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 
+    0 4px 16px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    0 1px 0 rgba(255,255,255,0.1);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  text-align: left;
+  text-align: center;
   line-height: 1.2;
-  height: 40px;
-  width: 100px;
+  height: 44px;
+  min-width: 85px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-hud__score:hover,
+.game-hud__level:hover,
+.game-hud__lives:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.4),
+    0 1px 0 rgba(255,255,255,0.2);
+}
+
+.progress-bar {
+  background: linear-gradient(145deg, 
+    rgba(0,0,0,0.4) 0%, 
+    rgba(0,0,0,0.6) 100%);
+  padding: 0;
+  border-radius: 14px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 
+    0 4px 16px rgba(0,0,0,0.15),
+    inset 0 2px 4px rgba(0,0,0,0.3),
+    inset 0 -1px 0 rgba(255,255,255,0.1);
+  height: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.3), 
+    transparent);
 }
 
 .game-hud__lives {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
   text-align: center;
+  min-width: 100px;
+}
+
+.hud-control-btn {
+  background: linear-gradient(145deg, 
+    rgba(255,255,255,0.15) 0%, 
+    rgba(255,255,255,0.05) 100%);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 4px 16px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    0 1px 0 rgba(255,255,255,0.1);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-control-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.hud-control-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.4),
+    0 1px 0 rgba(255,255,255,0.2);
+}
+
+.hud-control-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.hud-control-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* Audio mute indicator */
+.hud-control-btn .audio-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.hud-control-btn .mute-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 28px;
+  background: #ff0000;
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+}
+
+.hud-control-btn.muted .mute-indicator {
+  opacity: 1;
+}
+
+.hud-control-btn.muted .audio-icon {
+  opacity: 0.6;
 }
 
 /* Progress Bar */
@@ -410,6 +635,13 @@ body {
   color: #E0E0E0;
 }
 
+.pause-overlay__secondary-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .pause-overlay__resume-btn {
   padding: 12px 24px;
   font-size: 1.1rem;
@@ -425,6 +657,53 @@ body {
   box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
   transition: all 0.2s ease;
   font-weight: bold;
+}
+
+.pause-overlay__audio-btn {
+  background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.pause-overlay__audio-btn .mute-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 28px;
+  background: #ff0000;
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+}
+
+.pause-overlay__audio-btn.muted .mute-indicator {
+  opacity: 1;
+}
+
+.pause-overlay__audio-btn.muted .audio-icon {
+  opacity: 0.6;
+}
+
+.pause-overlay__audio-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
 }
 
 .pause-overlay__resume-btn:hover {
@@ -817,11 +1096,26 @@ body {
     margin-bottom: 0.8rem;
   }
   
+  .pause-overlay__secondary-controls {
+    margin-top: 0.8rem;
+    margin-bottom: 0.3rem;
+  }
+  
   .pause-overlay__resume-btn {
     padding: 10px 18px;
     font-size: 0.95rem;
     min-height: 40px;
     min-width: 120px;
+  }
+  
+  .pause-overlay__audio-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .pause-overlay__audio-btn .mute-indicator {
+    height: 24px;
   }
   
   .pause-overlay__help-btn {
