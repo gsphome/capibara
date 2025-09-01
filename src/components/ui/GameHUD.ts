@@ -61,13 +61,17 @@ export class GameHUD {
     const hudRow = document.createElement('div');
     hudRow.className = 'game-hud__row';
     
+    // Add pause button to HUD on mobile
+    const pauseBtn = document.querySelector('.pause-button');
+    if (pauseBtn && window.innerWidth <= 1024) {
+      hudRow.appendChild(pauseBtn);
+    }
+    
     hudRow.appendChild(this.scoreElement);
     hudRow.appendChild(this.levelElement);
     hudRow.appendChild(this.missedElement);
     
-    this.element.appendChild(hudRow);
-    
-    // Progress bar in second row
+    // Progress bar in the same row for mobile
     const progressContainer = document.createElement('div');
     progressContainer.className = 'progress-bar';
     
@@ -76,7 +80,15 @@ export class GameHUD {
     this.progressFill.style.width = '0%';
     
     progressContainer.appendChild(this.progressFill);
-    this.element.appendChild(progressContainer);
+    hudRow.appendChild(progressContainer);
+    
+    // Add audio button to HUD on mobile
+    const audioBtn = document.querySelector('.audio-toggle');
+    if (audioBtn && window.innerWidth <= 1024) {
+      hudRow.appendChild(audioBtn);
+    }
+    
+    this.element.appendChild(hudRow);
     
     this.progressBar = progressContainer;
 

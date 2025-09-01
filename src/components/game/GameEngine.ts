@@ -10,6 +10,7 @@ import { LevelTransition } from '../ui/LevelTransition';
 import { PauseOverlay } from '../ui/PauseOverlay';
 import { HelpModal } from '../ui/HelpModal';
 import { PauseButton } from '../ui/PauseButton';
+import { MobileUIBar } from '../ui/MobileUIBar';
 import { AudioManager } from '../../audio/AudioManager';
 import type { Vegetable } from '../../types/game.types';
 
@@ -24,7 +25,9 @@ export class GameEngine {
   private pauseOverlay!: PauseOverlay;
   private helpModal!: HelpModal;
   private pauseButton!: PauseButton;
+  private mobileUIBar!: MobileUIBar;
   private audioManager = AudioManager.getInstance();
+  private isMobile: boolean = window.innerWidth <= 1024;
   private animationId: number = 0;
   private lastTime: number = 0;
   private vegetables: Vegetable[] = [];
@@ -40,12 +43,26 @@ export class GameEngine {
     this.player = new CapybaraPlayer(this.container);
     this.spawner = new VegetableSpawner(this.container);
     this.particles = new ParticleSystem(this.container);
-    this.hud = new GameHUD(this.container);
+    
+    // Only create GameHUD for desktop
+    if (!this.isMobile) {
+      this.hud = new GameHUD(this.container);
+    }
+    
     this.gameOverScreen = new GameOverScreen(this.container, () => this.restart());
     this.levelTransition = new LevelTransition(this.container);
     this.pauseOverlay = new PauseOverlay(this.container, () => this.helpModal.show());
     this.helpModal = new HelpModal();
-    this.pauseButton = new PauseButton(document.body, (paused) => this.handlePauseToggle(paused));
+    
+    // Use MobileUIBar for mobile, separate buttons for desktop
+    if (this.isMobile) {
+      this.mobileUIBar = new MobileUIBar(
+        (paused) => this.handlePauseToggle(paused),
+        () => this.handleAudioToggle()
+      );
+    } else {
+      this.pauseButton = new PauseButton(document.body, (paused) => this.handlePauseToggle(paused));
+    }
 
     // Subscribe to Zustand store changes
     useGameStore.subscribe((state) => this.handleGameStateChange(state));
@@ -67,10 +84,18 @@ export class GameEngine {
       currentState.resumeGame();
     }
   }
+  
+  private handleAudioToggle(): void {
+    this.audioManager.toggle();
+  }
 
   private handleGameStateChange(state: GameState): void {
     // Update pause button state
-    this.pauseButton.updateState(state.gameStatus === 'paused');
+    if (this.isMobile && this.mobileUIBar) {
+      this.mobileUIBar.updatePauseState(state.gameStatus === 'paused');
+    } else if (this.pauseButton) {
+      this.pauseButton.updateState(state.gameStatus === 'paused');
+    }
     
     if (state.gameStatus === 'paused') {
       this.pauseOverlay.show(() => this.gameStore.getState().resumeGame());
@@ -207,13 +232,20 @@ export class GameEngine {
 
     // Update UI with current state
     const currentState = this.gameStore.getState();
-    this.hud.updateScore(currentState.score);
-    this.hud.updateLevel(currentState.level);
-    this.hud.updateLives(3 - currentState.missedVegetables);
-    
-    // Calculate visual fill percentage
     const visualFillPercentage = GameSettings.calculateFillPercentage(currentState.capybaraFillPercentage);
-    this.hud.updateProgress(visualFillPercentage);
+    
+    if (this.isMobile && this.mobileUIBar) {
+      this.mobileUIBar.updateScore(currentState.score);
+      this.mobileUIBar.updateLevel(currentState.level);
+      this.mobileUIBar.updateLives(3 - currentState.missedVegetables);
+      this.mobileUIBar.updateProgress(visualFillPercentage);
+    } else if (this.hud) {
+      this.hud.updateScore(currentState.score);
+      this.hud.updateLevel(currentState.level);
+      this.hud.updateLives(3 - currentState.missedVegetables);
+      this.hud.updateProgress(visualFillPercentage);
+    }
+    
     this.player.updateFill(visualFillPercentage);
   }
 
@@ -258,10 +290,17 @@ export class GameEngine {
     this.gameOverScreen.hide();
     
     // Reset UI
-    this.hud.updateScore(0);
-    this.hud.updateLevel(1);
-    this.hud.updateLives(3);
-    this.hud.updateProgress(0);
+    if (this.isMobile && this.mobileUIBar) {
+      this.mobileUIBar.updateScore(0);
+      this.mobileUIBar.updateLevel(1);
+      this.mobileUIBar.updateLives(3);
+      this.mobileUIBar.updateProgress(0);
+    } else if (this.hud) {
+      this.hud.updateScore(0);
+      this.hud.updateLevel(1);
+      this.hud.updateLives(3);
+      this.hud.updateProgress(0);
+    }
     this.player.updateFill(0);
   }
 
@@ -296,8 +335,17 @@ export class GameEngine {
     
     this.player.destroy();
     this.particles.destroy();
-    this.hud.destroy();
+    
+    if (!this.isMobile && this.hud) {
+      this.hud.destroy();
+    }
+    
     this.gameOverScreen.destroy();
-    this.pauseButton.destroy();
+    
+    if (this.isMobile && this.mobileUIBar) {
+      this.mobileUIBar.destroy();
+    } else if (this.pauseButton) {
+      this.pauseButton.destroy();
+    }
   }
 }
