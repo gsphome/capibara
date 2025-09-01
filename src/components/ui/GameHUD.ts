@@ -106,8 +106,22 @@ export class GameHUD {
   public updateProgress(percentage: number): void {
     this.progressFill.style.width = `${percentage}%`;
     
-    if (percentage >= 100) {
-      this.progressFill.style.background = 'linear-gradient(90deg, #FFD700, #FFA500)';
+    // Remove all energy level classes
+    this.progressFill.classList.remove('progress-bar__fill--low', 'progress-bar__fill--medium-low', 'progress-bar__fill--medium', 'progress-bar__fill--high');
+    
+    // Apply energy color progression: Red (low) → Yellow (medium) → Green (high)
+    if (percentage >= 80) {
+      // High energy: Bright green
+      this.progressFill.classList.add('progress-bar__fill--high');
+    } else if (percentage >= 50) {
+      // Medium energy: Yellow/orange
+      this.progressFill.classList.add('progress-bar__fill--medium');
+    } else if (percentage >= 20) {
+      // Low-medium energy: Orange/red-orange
+      this.progressFill.classList.add('progress-bar__fill--medium-low');
+    } else {
+      // Very low energy: Red (default)
+      this.progressFill.classList.add('progress-bar__fill--low');
     }
   }
 

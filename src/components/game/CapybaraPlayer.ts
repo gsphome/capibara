@@ -47,9 +47,9 @@ export class CapybaraPlayer {
       left: 0;
       width: 100%;
       height: 0%;
-      background: linear-gradient(45deg, #32CD32, #228B22);
+      background: linear-gradient(45deg, #FF4500, #DC143C);
       border-radius: 50% 50% 40% 40%;
-      transition: height 0.3s ease;
+      transition: height 0.3s ease, background 0.3s ease;
     `;
     
     body.appendChild(this.fillElement);
@@ -164,11 +164,19 @@ export class CapybaraPlayer {
   public updateFill(percentage: number): void {
     this.fillElement.style.height = `${percentage}%`;
     
-    // Change color as capybara gets more energy
+    // Energy color progression: Red (low) → Yellow (medium) → Green (high)
     if (percentage >= 80) {
-      this.fillElement.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+      // High energy: Bright green
+      this.fillElement.style.background = 'linear-gradient(45deg, #32CD32, #228B22)';
     } else if (percentage >= 50) {
-      this.fillElement.style.background = 'linear-gradient(45deg, #ADFF2F, #32CD32)';
+      // Medium energy: Yellow/orange
+      this.fillElement.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+    } else if (percentage >= 20) {
+      // Low-medium energy: Orange/red-orange
+      this.fillElement.style.background = 'linear-gradient(45deg, #FF8C00, #FF6347)';
+    } else {
+      // Very low energy: Red
+      this.fillElement.style.background = 'linear-gradient(45deg, #FF4500, #DC143C)';
     }
   }
 

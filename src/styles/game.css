@@ -259,10 +259,27 @@ body {
   top: 0;
   left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #32CD32, #228B22);
-  transition: width 0.3s ease-out;
+  background: linear-gradient(90deg, #FF4500, #DC143C);
+  transition: width 0.3s ease-out, background 0.3s ease-out;
   border-radius: 20px;
   opacity: 0.8;
+}
+
+/* Energy level color states */
+.progress-bar__fill--low {
+  background: linear-gradient(90deg, #FF4500, #DC143C);
+}
+
+.progress-bar__fill--medium-low {
+  background: linear-gradient(90deg, #FF8C00, #FF6347);
+}
+
+.progress-bar__fill--medium {
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+}
+
+.progress-bar__fill--high {
+  background: linear-gradient(90deg, #32CD32, #228B22);
 }
 
 /* Level Transition */
@@ -353,6 +370,8 @@ body {
   color: white;
   width: 320px;
   max-width: 90vw;
+  max-height: 70vh;
+  overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3);
   backdrop-filter: blur(15px);
 }
@@ -630,20 +649,22 @@ body {
 /* Mobile Optimizations */
 @media (max-width: 1024px) {
   body {
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     min-height: 100dvh;
+    align-items: flex-start;
+    padding-top: 50px;
   }
   
   .game-wrapper {
     flex-direction: column;
     gap: 5px;
     padding: 5px;
-    margin-top: max(20px, env(safe-area-inset-top));
+    margin-top: 0;
   }
   
   .game-sidebar {
     position: fixed;
-    top: max(5px, env(safe-area-inset-top));
+    top: 5px;
     left: 50%;
     transform: translateX(-50%);
     flex-direction: column;
@@ -652,11 +673,11 @@ body {
     min-width: auto;
     width: auto;
     background: rgba(0,0,0,0.9);
-    padding: 8px 12px 6px;
-    border-radius: 0 0 20px 20px;
+    padding: 6px 10px 4px;
+    border-radius: 0 0 15px 15px;
     backdrop-filter: blur(25px);
     border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     z-index: 30;
   }
   
@@ -692,9 +713,9 @@ body {
   .capybara-game {
     width: 95vw;
     max-width: 500px;
-    height: calc(100dvh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(100dvh - 100px - env(safe-area-inset-bottom));
     max-height: 450px;
-    margin-top: max(85px, calc(65px + env(safe-area-inset-top)));
+    margin-top: 0;
   }
 }
 
@@ -706,8 +727,52 @@ body {
   }
   
   .game-wrapper {
-    margin-top: max(30px, env(safe-area-inset-top) + 10px);
+    margin-top: 0;
     padding: 8px;
+  }
+  
+  /* Mobile Modal Optimizations */
+  .pause-overlay__content {
+    width: 85vw;
+    max-width: 300px;
+    padding: 1.2rem 1rem;
+    border-radius: 15px;
+    max-height: 60vh;
+  }
+  
+  .pause-overlay__content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .pause-overlay__content p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .pause-overlay__resume-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    min-height: 44px;
+    min-width: 140px;
+  }
+  
+  .pause-overlay__help-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+  }
+  
+  .pause-overlay__icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  /* Start Modal Mobile */
+  .start-modal {
+    position: relative !important;
+    margin: 50px auto 0 !important;
+    transform: none !important;
   }
 
   .vegetable {
@@ -754,9 +819,10 @@ body {
   }
 
   .capybara-game {
-    height: calc(100dvh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(100dvh - 120px - env(safe-area-inset-bottom));
     max-height: 350px;
     min-height: 280px;
+    margin-top: 0;
   }
 
   .game-over__title {

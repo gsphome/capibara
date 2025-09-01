@@ -199,6 +199,8 @@ class CapybaraCatcherGame {
 
   private showInstructions(): void {
     const instructions = document.createElement('div');
+    const isMobile = window.innerWidth <= 768;
+    
     instructions.style.cssText = `
       position: fixed;
       top: 0;
@@ -209,61 +211,77 @@ class CapybaraCatcherGame {
       color: white;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: ${isMobile ? 'flex-start' : 'center'};
       align-items: center;
       z-index: 1000;
-      padding: 2rem;
+      padding: ${isMobile ? '60px 1rem 2rem' : '2rem'};
+      padding-top: ${isMobile ? '60px' : '2rem'};
       box-sizing: border-box;
-      overflow: hidden;
+      overflow-y: auto;
     `;
     
+    const modalWidth = isMobile ? '90vw' : '350px';
+    const fontSize = isMobile ? '1.5rem' : '2rem';
+    const padding = isMobile ? '1rem' : '1.5rem';
+    
     instructions.innerHTML = `
-      <div style="background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 20px; width: 350px; max-width: 90vw; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
-        <h1 style="font-size: 2rem; margin: 0 0 0.8rem 0; color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🦫 Capybara Catcher</h1>
-        <p style="font-size: 1rem; margin-bottom: 1rem; color: #E0E0E0; line-height: 1.4;">Help the hungry capybara<br>catch falling vegetables!</p>
-        <div style="margin: 0.8rem 0; font-size: 0.9rem;">
-          <p><strong>Controls:</strong> Mouse/Keys/Touch</p>
-          <p><strong>Goal:</strong> Fill capybara to 100%</p>
-          <p><strong>Warning:</strong> Don't miss 3 vegetables!</p>
+      <div class="start-modal" style="
+        background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: ${padding};
+        border-radius: 15px;
+        width: ${modalWidth};
+        max-width: 95vw;
+        max-height: 80vh;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        overflow-y: auto;
+      ">
+        <h1 style="font-size: ${fontSize}; margin: 0 0 0.5rem 0; color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🦫 Capybara Catcher</h1>
+        <p style="font-size: ${isMobile ? '0.9rem' : '1rem'}; margin-bottom: 0.8rem; color: #E0E0E0; line-height: 1.3;">Help the hungry capybara catch falling vegetables!</p>
+        <div style="margin: 0.6rem 0; font-size: ${isMobile ? '0.8rem' : '0.9rem'};">
+          <p style="margin: 0.3rem 0;"><strong>Controls:</strong> ${isMobile ? 'Touch' : 'Mouse/Keys/Touch'}</p>
+          <p style="margin: 0.3rem 0;"><strong>Goal:</strong> Fill capybara to 100%</p>
+          <p style="margin: 0.3rem 0;"><strong>Warning:</strong> Don't miss 3 vegetables!</p>
         </div>
-        <div style="margin: 1rem 0;">
+        ${!isMobile ? `<div style="margin: 0.8rem 0;">
           <button id="helpButton" style="
             display: inline-block;
-            padding: 8px 16px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            font-size: 0.8rem;
             background: rgba(255,255,255,0.1);
             color: white;
             border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 15px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
             backdrop-filter: blur(10px);
-          " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🥕 Vegetable Guide</button>
-        </div>
+          ">🥕 Vegetable Guide</button>
+        </div>` : ''}
       <button id="startGame" style="
-        padding: 12px 24px;
-        font-size: 1.2rem;
+        padding: ${isMobile ? '14px 28px' : '12px 24px'};
+        font-size: ${isMobile ? '1.1rem' : '1.2rem'};
         background: linear-gradient(45deg, #32CD32, #228B22);
         color: white;
         border: none;
-        border-radius: 20px;
+        border-radius: 18px;
         cursor: pointer;
-        margin-top: 1rem;
-        min-height: 45px;
-        min-width: 160px;
+        margin-top: 0.8rem;
+        min-height: ${isMobile ? '50px' : '45px'};
+        min-width: ${isMobile ? '200px' : '160px'};
         font-weight: bold;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 12px rgba(50, 205, 50, 0.3);
         transition: all 0.2s ease;
-      " onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" ontouchstart="this.style.transform='scale(0.95)'" ontouchend="this.style.transform='scale(1)'">🎮 Start Game</button>
+      ">🎮 Start Game</button>
       </div>
     `;
     
     this.container.appendChild(instructions);
     
     const startButton = instructions.querySelector('#startGame') as HTMLButtonElement;
-    const helpButton = instructions.querySelector('#helpButton') as HTMLButtonElement;
     
     // Enhanced mobile interaction
     const startGame = () => {
@@ -296,10 +314,13 @@ class CapybaraCatcherGame {
     startButton.addEventListener('click', initAudioAndStart);
     startButton.addEventListener('touchend', initAudioAndStart);
     
-    // Help button interaction
-    helpButton.addEventListener('click', () => {
-      this.helpModal.show();
-    });
+    // Help button interaction (only on desktop)
+    const helpButton = instructions.querySelector('#helpButton') as HTMLButtonElement;
+    if (helpButton) {
+      helpButton.addEventListener('click', () => {
+        this.helpModal.show();
+      });
+    }
     
     // Add click sounds
     startButton.addEventListener('click', () => {
